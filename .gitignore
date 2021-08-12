@@ -34,3 +34,4 @@
 #Clion
 .idea
 cmake-build-debug
+/graphs/benchmark/large/
