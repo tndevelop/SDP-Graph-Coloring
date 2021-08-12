@@ -18,13 +18,15 @@ int maxColUsed = -1;
 
 int main() {
 
-    //map<int, vector<int>> graph = readGraph("./graphs/benchmark/manual/v10.gra");
+    map<int, vector<int>> graph = readGraph("./graphs/benchmark/manual/v10.gra");
     //map<int, vector<int>> graph = readGraph("./graphs/benchmark/manual/v100.gra");
     //map<int, vector<int>> graph = readGraph("./graphs/benchmark/small_sparse_real/agrocyc_dag_uniq.gra");
     //map<int, vector<int>> graph = readGraph("./graphs/benchmark/small_sparse_real/human_dag_uniq.gra");
     //map<int, vector<int>> graph = readGraph("./graphs/benchmark/small_dense_real/arXiv_sub_6000-1.gra");
     //map<int, vector<int>> graph = readGraph("./graphs/benchmark/scaleFree/ba10k5d.gra");
-    map<int, vector<int>> graph = readGraph("./graphs/benchmark/large/uniprotenc_22m.scc.gra");
+
+    // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
+    //map<int, vector<int>> graph = readGraph("./graphs/benchmark/large/uniprotenc_22m.scc.gra");
     //map<int, vector<int>> graph = readGraph("./graphs/benchmark/large/go_uniprot.gra");
 
     vector<int> colors = initializeLabels(graph.size());
