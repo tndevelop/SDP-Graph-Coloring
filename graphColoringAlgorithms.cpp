@@ -1,5 +1,8 @@
-
+#include <map>
+#include <vector>
 #include "graphColoringAlgorithms.h"
+
+
 
 using namespace std;
 
