@@ -1,14 +1,9 @@
-//
-// Created by tommy on 19/08/2021.
-//
-
 #ifndef REPO_GRAPHCOLORINGALGORITHMS_H
 #define REPO_GRAPHCOLORINGALGORITHMS_H
 
-
-
 #include <map>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
