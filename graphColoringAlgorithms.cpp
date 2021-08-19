@@ -21,7 +21,7 @@ vector<int> greedyAssignment(map<int, vector<int>> graph, vector<int> colors, in
 
         //assign lowest color not in use by any neighbor
         while(colors[node.first]== -1){
-            if(std::find(neighborColors.begin(), neighborColors.end(), selectedCol) != neighborColors.end()) {
+            if(find(neighborColors.begin(), neighborColors.end(), selectedCol) != neighborColors.end()) {
                 /* neighborColors contains selectedCol */
                 selectedCol++;
             }else{
