@@ -33,6 +33,10 @@ int main() {
 
     colors = greedyAssignment(graph, colors);
 
+    //some output just to be sure the application ran properly
+    cout << graph.size() << endl;
+    cout << colors[5];
+
     return 0;
 }
 
