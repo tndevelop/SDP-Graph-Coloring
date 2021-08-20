@@ -16,16 +16,23 @@ int main(int argc, char ** argv) {
                             "large/uniprotenc_22m.scc.gra", "large/go_uniprot.gra" };
     string finalPath = basePath + graphPaths[atoi(argv[1])];
 
-    map<int, vector<int>> graph = readGraph(finalPath);
+    map<int, list<int>> graph = readGraph(finalPath);
 
     vector<int> colors = initializeLabels(graph.size());
 
-    colors = greedyAssignment(graph, colors, &maxColUsed);
+    vector<int> colorsGreedy = greedyAssignment(graph, colors, &maxColUsed);
 
     //some output just to be sure the application ran properly
     cout << "number of nodes: " << graph.size() << endl;
-    cout << "number of colors: " << maxColUsed << endl;
-    cout << "for instance color " << colors[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+    cout << "number of greedy colors: " << maxColUsed + 1 << endl;
+    cout << "for instance color " << colorsGreedy[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+
+    maxColUsed = -1;
+    vector<int> colorsJP = jonesPlassmannSequentialAssignment(graph, colors, &maxColUsed);
+
+    //some output just to be sure the application ran properly
+    cout << "number of JP colors: " << maxColUsed + 1 << endl;
+    cout << "for instance color " << colorsJP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
 
     return 0;
 }

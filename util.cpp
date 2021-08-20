@@ -1,4 +1,5 @@
 #include "util.h"
+#include <list>
 
 using namespace std;
 
@@ -10,12 +11,12 @@ vector<int> initializeLabels( int size) {
     return labels;
 }
 
-map<int, vector<int>> readGraph(string path){
+map<int, list<int>> readGraph(string path){
     string line;
     int nodeNumber=-1;
-    vector<int> linkedNodes;
-    vector<int> tmp;
-    map<int, vector<int>> graph {};
+    list<int> linkedNodes;
+    list<int> tmp;
+    map<int, list<int>> graph {};
 
     ifstream myfile (path);
     if (myfile.is_open())

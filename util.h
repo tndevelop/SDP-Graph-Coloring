@@ -11,11 +11,11 @@
 #include <map>
 #include <vector>
 #include <stdio.h>
-
+#include <list>
 
 using namespace std;
 
-map<int, vector<int>> readGraph(string path);
+map<int, list<int>> readGraph(string path);
 
 vector<int> initializeLabels(int size);
 
