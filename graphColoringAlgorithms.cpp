@@ -58,6 +58,11 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
                 if (graphNumberMap[node.first] < graphNumberMap[neighbour]) {
                     maxNode = false;
                 }
+                else if (graphNumberMap[node.first] == graphNumberMap[neighbour]) {
+                    if (node.first < neighbour) {
+                        maxNode = false;
+                    }
+                }
             }
             if (maxNode) {
                 independentSet.emplace(node);
