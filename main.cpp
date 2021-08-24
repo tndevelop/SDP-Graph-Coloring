@@ -28,7 +28,14 @@ int main(int argc, char ** argv) {
     cout << "for instance color " << colorsGreedy[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
 
     maxColUsed = -1;
-    vector<int> colorsJP = jonesPlassmannSequentialAssignment(graph, colors, &maxColUsed);
+    vector<int> colorsJPS = jonesPlassmannSequentialAssignment(graph, colors, &maxColUsed);
+
+    //some output just to be sure the application ran properly
+    cout << "number of JP colors: " << maxColUsed + 1 << endl;
+    cout << "for instance color " << colorsJPS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+
+    maxColUsed = -1;
+    vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, colors, &maxColUsed);
 
     //some output just to be sure the application ran properly
     cout << "number of JP colors: " << maxColUsed + 1 << endl;
