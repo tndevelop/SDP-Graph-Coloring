@@ -31,7 +31,8 @@
 *.out
 *.app
 
-#Clion
+#Clion, vscode and files too large
 .idea
 cmake-build-debug
 /graphs/benchmark/large/
+.vs
