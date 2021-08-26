@@ -95,6 +95,9 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
 
             int stepSize = nodesLeft / maxThreads;
 
+            //Lock uncolouredNodes while starting all the threads
+            lpmutex.lock();
+
             for (int i = 0; i < maxThreads ; i++) {
                 
                 //Split the remaining nodes by the number of threads
@@ -116,6 +119,9 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
                 //workers.emplace_back([&uncoloredNodes, &colors, &graph, &graphNumberMap, maxColUsed, &nodesToColourVect, i] {workerFunction(uncoloredNodes, colors, graph, graphNumberMap, maxColUsed, nodesToColourVect, i); });
 
             }
+
+            //Unlock uncolouredNodes so threads can update it
+            lpmutex.unlock();
 
             //Wait for threads to finish before moving to next step
             for (auto& worker : workers) {
@@ -192,10 +198,12 @@ void findIndependentSets(map<int, list<int>> &myUncoloredNodes, map<int, int> &g
         for (auto const& neighbour : node.second) {
             if (graphNumberMap[node.first] < graphNumberMap[neighbour]) {
                 maxNode = false;
+                break;
             }
             else if (graphNumberMap[node.first] == graphNumberMap[neighbour]) {
                 if (node.first < neighbour) {
                     maxNode = false;
+                    break;
                 }
             }
         }
