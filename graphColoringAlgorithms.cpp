@@ -89,18 +89,20 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
         if (nodesLeft >= maxThreads) {
             vector<thread> workers;
 
+            int stepSize = nodesLeft / maxThreads;
+
             for (int i = 0; i < maxThreads ; i++) {
                 
                 //Split the remaining nodes by the number of threads
                 map<int, list<int>>::iterator startIt = uncoloredNodes.begin();
-                advance(startIt, i * nodesLeft / maxThreads);
+                advance(startIt, i * stepSize);
                 map<int, list<int>>::iterator endIt;
-                if (i = maxThreads - 1) {
+                if (i == maxThreads - 1) {
                     endIt = uncoloredNodes.end(); // Bound for the end nodes
                 }
                 else {
                     endIt = uncoloredNodes.begin();
-                    advance(endIt, i * nodesLeft / maxThreads + nodesLeft / maxThreads); 
+                    advance(endIt, i * stepSize + stepSize); 
                 }
                 map<int, list<int>> nodesToColour(startIt, endIt);
 
