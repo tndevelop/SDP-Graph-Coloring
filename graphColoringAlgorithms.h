@@ -14,11 +14,15 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> map, vector<i
 
 vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
 
-void workerFunction(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, int>& graphNumberMap, int* maxColUsed, map<int, list<int>> nodesToColour);
+void assignNumberWorker(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
 
-map<int, list<int>> findIndependentSets(map<int, list<int>> uncoloredNodes, map<int, int> &graphNumberMap);
+void assignRandomNumbers(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
 
-void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> independentSet, int* maxColUsed);
+void workerFunction(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, int>& graphNumberMap, int* maxColUsed, map<int, list<int>> nodesToColour); //vector<map<int, list<int>>>& nodesToColourVect, int i); // 
+
+void findIndependentSets(map<int, list<int>> &uncoloredNodes, map<int, int> &graphNumberMap, map<int, list<int>>& independentSet);
+
+void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> &independentSet, int* maxColUsed);
 
 vector<int> smallestDegreeLastSequentialAssignement(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
 vector<int> smallestDegreeLastParallelAssignement(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
