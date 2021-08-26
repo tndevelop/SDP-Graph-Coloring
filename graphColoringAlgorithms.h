@@ -20,4 +20,10 @@ map<int, list<int>> findIndependentSets(map<int, list<int>> uncoloredNodes, map<
 
 void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> independentSet, int* maxColUsed);
 
+vector<int> smallestDegreeLastSequentialAssignement(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
+vector<int> smallestDegreeLastParallelAssignement(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
+
+map<int,int> weightNodes(map<int,list<int>> graph);
+void parallelWeighting(pair<int, list<int>> node, map<int, int> graphNumberMap, int i,  map<int,list<int>> unweightedGraph);
+
 #endif //REPO_GRAPHCOLORINGALGORITHMS_H

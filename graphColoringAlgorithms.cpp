@@ -189,4 +189,88 @@ void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map
         }
         lpmutex.unlock();
     }
+
+
+
+}
+vector<int> smallestDegreeLastSequentialAssignement(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
+    int i=1;
+    int k=1;
+    map<int,list<int>> unweightedGraph(graph);
+    //Assign a random number to each vertex
+    map<int, int> graphNumberMap = {};
+    while(!unweightedGraph.empty()){
+        for(const auto node : unweightedGraph ){
+            if(node.second.size()<=k){
+                graphNumberMap[node.first]=i;
+                for(const auto neighbour : node.second){
+                    unweightedGraph[neighbour].remove(node.first);
+                }
+                unweightedGraph.erase(node.first);
+            }
+        }
+        i++;
+        k++;
+    }
+
+    map<int, list<int>> uncoloredNodes = graph;
+
+    while (uncoloredNodes.size() > 0) {
+
+        //Create independent set of vertices with the highest weights of all neighbours
+        map<int, list<int>> independentSet = findIndependentSets(uncoloredNodes, graphNumberMap);
+
+        //In each independent set assign the minimum colour not belonging to a neighbour
+        assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
+
+    }
+
+    return colors;
+
+
+}
+
+vector<int> smallestDegreeLastParallelAssignement(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
+
+
+    map<int,int> graphNumberMap = weightNodes(graph);
+
+    map<int, list<int>> uncoloredNodes = graph;
+
+    while (uncoloredNodes.size() > 0) {
+
+        //Create independent set of vertices with the highest weights of all neighbours
+        map<int, list<int>> independentSet = findIndependentSets(uncoloredNodes, graphNumberMap);
+
+        //In each independent set assign the minimum colour not belonging to a neighbour
+        assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
+
+    }
+
+    return colors;
+}
+
+map<int,int> weightNodes(map<int,list<int>> graph){
+    int i=1;
+    int k=1;
+    vector<thread> threads;
+    map<int, int> graphNumberMap = {};
+    map<int,list<int>> unweightedGraph(graph);
+    while(!unweightedGraph.empty()){
+        for(const auto node : unweightedGraph ){
+            if(node.second.size()<=k)
+                threads.emplace_back([node,&graphNumberMap,i,&unweightedGraph] {parallelWeighting(node,graphNumberMap,i,unweightedGraph);});
+        }
+        i++;
+        k++;
+    }
+    return graphNumberMap;
+}
+
+void parallelWeighting(pair<int, list<int>> node,map<int, int> graphNumberMap, int i, map<int,list<int>> unweightedGraph){
+    graphNumberMap[node.first]=i;
+    for(const auto neighbour : node.second){
+        unweightedGraph[neighbour].remove(node.first);
+    }
+    unweightedGraph.erase(node.first);
 }
