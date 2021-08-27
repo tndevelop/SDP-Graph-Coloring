@@ -143,7 +143,9 @@ map<int, list<int>> findIndependentSets(map<int, list<int>> myUncoloredNodes, ma
                 maxNode = false;
             }
             else if (graphNumberMap[node.first] == graphNumberMap[neighbour]) {
-                if (node.first < neighbour) {
+                int node1= rand();
+                int neighbour1= rand();
+                if (node1 < neighbour1) {
                     maxNode = false;
                 }
             }
@@ -193,23 +195,33 @@ void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map
 
 
 }
-vector<int> smallestDegreeLastSequentialAssignement(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
+vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
     int i=1;
-    int k=1;
+    int minDegree=graph.size();
+    for(const auto node:graph){
+        if(node.second.size()<minDegree)
+            minDegree=node.second.size();
+    }
+    int k=minDegree;
     map<int,list<int>> unweightedGraph(graph);
+    map<int,list<int>> tempGraph(graph);
+    vector<int> weightedNodes={};
     //Assign a random number to each vertex
     map<int, int> graphNumberMap = {};
     while(!unweightedGraph.empty()){
-        for(const auto node : unweightedGraph ){
+        int actualSize=tempGraph.size();
+        for(auto const& node : unweightedGraph ){
             if(node.second.size()<=k){
                 graphNumberMap[node.first]=i;
                 for(const auto neighbour : node.second){
-                    unweightedGraph[neighbour].remove(node.first);
+                    tempGraph[neighbour].remove(node.first);
                 }
-                unweightedGraph.erase(node.first);
+                tempGraph.erase(node.first);
             }
         }
-        i++;
+        unweightedGraph.operator=(tempGraph);
+        if(tempGraph.size()<actualSize)
+             i++;
         k++;
     }
 
@@ -230,7 +242,7 @@ vector<int> smallestDegreeLastSequentialAssignement(map<int, list<int>> graph, v
 
 }
 
-vector<int> smallestDegreeLastParallelAssignement(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
+vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
 
 
     map<int,int> graphNumberMap = weightNodes(graph);
