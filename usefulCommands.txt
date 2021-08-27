@@ -1,0 +1,8 @@
+COMANDI di test
+
+1) all the algorithms on all the large files
+
+runlim -o ./logs/150Greedy.txt ./a.out 6 0 && runlim -o ./logs/150JP.txt ./a.out 6 2 &&
+runlim -o ./logs/CiteseerGreedy.txt ./a.out 7 0 && runlim -o ./logs/CiteseerJP.txt ./a.out 7 2 &&
+runlim -o ./logs/22Greedy.txt ./a.out 8 0 && runlim -o ./logs/22JP.txt ./a.out 8 2 &&
+runlim -o ./logs/GoGreedy.txt ./a.out 9 0 && runlim -o ./logs/GoJP.txt ./a.out 9 2 
