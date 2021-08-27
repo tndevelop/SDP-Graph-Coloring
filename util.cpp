@@ -4,10 +4,13 @@
 using namespace std;
 
 vector<int> initializeLabels( int size) {
-    vector<int> labels;
-    for (int i = 0; i< size; i++){
+
+     vector <int> labels (size, -1);
+/*
+     vector<int> labels;
+     for (int i = 0; i< size; i++){
         labels.push_back(-1);
-    }
+    }*/
     return labels;
 }
 
