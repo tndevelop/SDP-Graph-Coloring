@@ -16,14 +16,9 @@ using namespace std;
  *          0 = greedy
  *          1 = JP sequential
  *          2 = JP parallel
-<<<<<<< HEAD
  *          3 = SDL sequential
  *          4 = SDL parallel
-=======
- *          3 = SML sequential
- *          4 = SML parallel
  *          5 = MIS sequential
->>>>>>> fb14aff6e85b1c1c167016153b16fc42b0e60f7f
  * )
  */
 
