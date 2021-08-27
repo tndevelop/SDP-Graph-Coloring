@@ -56,7 +56,8 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
     while (uncoloredNodes.size() > 0) {
 
         //Create independent set of vertices with the highest weights of all neighbours
-        map<int, list<int>> independentSet = findIndependentSets(uncoloredNodes, graphNumberMap);
+        map<int, list<int>> independentSet{};
+        findIndependentSets(uncoloredNodes, graphNumberMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
         assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
@@ -72,9 +73,11 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
     //In the main thread assign a random number to each vertex
     map<int, int> graphNumberMap = {};
 
-    for (auto const& node : graph) {
+    /*for (auto const& node : graph) {
         graphNumberMap[node.first] = rand();
-    }
+    }*/
+
+    assignRandomNumbers(graph, graphNumberMap); // Thought I'd utilise the threads but doesn't appear much quicker
 
     map<int, list<int>> uncoloredNodes = graph;
 
@@ -88,8 +91,12 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
 
         if (nodesLeft >= maxThreads) {
             vector<thread> workers;
+            //vector<map<int, list<int>>> nodesToColourVect;
 
             int stepSize = nodesLeft / maxThreads;
+
+            //Lock uncolouredNodes while starting all the threads
+            lpmutex.lock();
 
             for (int i = 0; i < maxThreads ; i++) {
                 
@@ -105,11 +112,16 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
                     advance(endIt, i * stepSize + stepSize); 
                 }
                 map<int, list<int>> nodesToColour(startIt, endIt);
+                //nodesToColourVect.emplace_back(nodesToColour);
 
                 //Create thread for set of uncoloured nodes
                 workers.emplace_back([&uncoloredNodes, &colors, &graph, &graphNumberMap, maxColUsed, nodesToColour] {workerFunction(uncoloredNodes, colors, graph, graphNumberMap, maxColUsed, nodesToColour); });
-                
+                //workers.emplace_back([&uncoloredNodes, &colors, &graph, &graphNumberMap, maxColUsed, &nodesToColourVect, i] {workerFunction(uncoloredNodes, colors, graph, graphNumberMap, maxColUsed, nodesToColourVect, i); });
+
             }
+
+            //Unlock uncolouredNodes so threads can update it
+            lpmutex.unlock();
 
             //Wait for threads to finish before moving to next step
             for (auto& worker : workers) {
@@ -117,7 +129,9 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
              }
         }
         else { //For last nodes where the number of nodes is less than the number of threads just use one thread
+            //vector<map<int, list<int>>> nodesToColourVect;
             map<int, list<int>> nodesToColour(uncoloredNodes.begin(), uncoloredNodes.end());
+            //nodesToColourVect.emplace_back(nodesToColour);
             thread worker([&uncoloredNodes, &colors, &graph, &graphNumberMap, maxColUsed, nodesToColour] {workerFunction(uncoloredNodes, colors, graph, graphNumberMap, maxColUsed, nodesToColour); });
             worker.join();
         }
@@ -127,26 +141,69 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> graph, vector<i
     return colors;
 }
 
-void workerFunction(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, int>& graphNumberMap, int* maxColUsed, map<int, list<int>> nodesToColour) {
+void workerFunction(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, int>& graphNumberMap, int* maxColUsed, map<int, list<int>> nodesToColour) { //vector<map<int, list<int>>> &nodesToColourVect, int i ) { //
     //Create independent set of vertices with the highest weights of all neighbours
-    map<int, list<int>> independentSet = findIndependentSets(nodesToColour, graphNumberMap);
+    map<int, list<int>> independentSet{};
+    findIndependentSets(nodesToColour, graphNumberMap, independentSet);
 
     //In each independent set assign the minimum colour not belonging to a neighbour
     assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
 }
 
-map<int, list<int>> findIndependentSets(map<int, list<int>> myUncoloredNodes, map<int, int> &graphNumberMap) {
+void assignRandomNumbers(map<int, list<int>>& graph, map<int, int>& graphNumberMap) {
+
+    int maxThreads = thread::hardware_concurrency();
+
+    vector<thread> workers;
+
+    int stepSize = graph.size() / maxThreads;
+
+    for (int i = 0; i < maxThreads; i++) {
+
+        //Split the remaining nodes by the number of threads
+        map<int, list<int>>::iterator startIt = graph.begin();
+        advance(startIt, i * stepSize);
+        map<int, list<int>>::iterator endIt;
+        if (i == maxThreads - 1) {
+            endIt = graph.end(); // Bound for the end nodes
+        }
+        else {
+            endIt = graph.begin();
+            advance(endIt, i * stepSize + stepSize);
+        }
+        map<int, list<int>> nodesToColour(startIt, endIt);
+
+        //Create thread for set of uncoloured nodes
+        workers.emplace_back([&graph, &graphNumberMap] {assignNumberWorker(graph, graphNumberMap); });
+
+    }
+
+    //Wait for threads to finish before moving to next step
+    for (auto& worker : workers) {
+        worker.join();
+    }
+}
+
+void assignNumberWorker(map<int, list<int>>& graph, map<int, int>& graphNumberMap) {
+    for (auto const& node : graph) {
+        graphNumberMap[node.first] = rand();
+    }
+}
+
+void findIndependentSets(map<int, list<int>> &myUncoloredNodes, map<int, int> &graphNumberMap, map<int, list<int>> &independentSet) {
     //Create independent set of vertices with the highest weights of all neighbours
-    map<int, list<int>> independentSet{};
+    //map<int, list<int>> independentSet{};
     for (auto const& node : myUncoloredNodes) {
         bool maxNode = true;
         for (auto const& neighbour : node.second) {
             if (graphNumberMap[node.first] < graphNumberMap[neighbour]) {
                 maxNode = false;
+                break;
             }
             else if (graphNumberMap[node.first] == graphNumberMap[neighbour]) {
                 if (node.first < neighbour) {
                     maxNode = false;
+                    break;
                 }
             }
         }
@@ -154,10 +211,10 @@ map<int, list<int>> findIndependentSets(map<int, list<int>> myUncoloredNodes, ma
             independentSet.emplace(node);
         }
     }
-    return independentSet;
+    //return independentSet;
 }
 
-void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> independentSet, int* maxColUsed) {
+void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> &independentSet, int* maxColUsed) {
     //In each independent set assign the minimum colour not belonging to a neighbour
     for (auto const& node : independentSet) {
 
@@ -220,7 +277,8 @@ vector<int> smallestDegreeLastSequentialAssignement(map<int, list<int>> graph, v
     while (uncoloredNodes.size() > 0) {
 
         //Create independent set of vertices with the highest weights of all neighbours
-        map<int, list<int>> independentSet = findIndependentSets(uncoloredNodes, graphNumberMap);
+        map<int, list<int>> independentSet{};
+        findIndependentSets(uncoloredNodes, graphNumberMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
         assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
@@ -242,7 +300,8 @@ vector<int> smallestDegreeLastParallelAssignement(map<int, list<int>> graph, vec
     while (uncoloredNodes.size() > 0) {
 
         //Create independent set of vertices with the highest weights of all neighbours
-        map<int, list<int>> independentSet = findIndependentSets(uncoloredNodes, graphNumberMap);
+        map<int, list<int>> independentSet{};
+        findIndependentSets(uncoloredNodes, graphNumberMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
         assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
