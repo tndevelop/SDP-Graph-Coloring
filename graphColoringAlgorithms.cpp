@@ -11,9 +11,16 @@ vector<int> greedyAssignment(map<int, list<int>> graph, vector<int> colors, int 
 
     vector<int> neighborColors;
     int selectedCol;
+    int percentage = graph.size() / 100;
+    int count = 0;
 
     for (auto const& node : graph)
     {
+
+        count++;
+        if (count % percentage == 0)
+            cout << count / percentage << "%" << endl;
+
         neighborColors = {};
         selectedCol = 0;
 
