@@ -30,5 +30,13 @@ vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> map, vector
 
 map<int,int> weightNodes(map<int,list<int>> graph);
 void parallelWeighting(pair<int, list<int>> node, map<int, int> graphNumberMap, int i,  map<int,list<int>> unweightedGraph);
+
 void findMaxNode(pair<int,list<int>> node,map<int, list<int>> &myUncoloredNodes,map<int, int> &graphNumberMap, map<int, list<int>> &independentSet,int back);
+
+vector<int> misSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed);
+
+void assignColoursMIS(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, list<int>>& maximalIndependentSet, int colour);
+void findMaximalIndependentSet(map<int, list<int>>& myUncoloredNodes, map<int, list<int>>& maximalIndependentSet);
+
+
 #endif //REPO_GRAPHCOLORINGALGORITHMS_H

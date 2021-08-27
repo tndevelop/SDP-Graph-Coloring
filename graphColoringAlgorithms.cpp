@@ -11,9 +11,16 @@ vector<int> greedyAssignment(map<int, list<int>> graph, vector<int> colors, int 
 
     vector<int> neighborColors;
     int selectedCol;
+    int percentage = graph.size() / 100;
+    int count = 0;
 
     for (auto const& node : graph)
     {
+
+        count++;
+        if (percentage != 0 && count % percentage == 0)
+            cout << count / percentage << "%" << endl;
+
         neighborColors = {};
         selectedCol = 0;
 
@@ -268,10 +275,8 @@ void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map
         }
         lpmutex.unlock();
     }
-
-
-
 }
+
 vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
     int i=1;
     int minDegree=graph.size();
@@ -363,4 +368,62 @@ void parallelWeighting(pair<int, list<int>> node,map<int, int> graphNumberMap, i
         unweightedGraph[neighbour].remove(node.first);
     }
     unweightedGraph.erase(node.first);
+}
+
+void findMaximalIndependentSet(map<int, list<int>>& myUncoloredNodes, map<int, list<int>>& maximalIndependentSet) {
+    for (auto const& node : myUncoloredNodes) {
+        bool maxNode = true;
+        for (auto const& neighbour : node.second) {
+            if (maximalIndependentSet.count(neighbour) > 0) {
+                maxNode = false;
+                break;
+            }
+        }
+        if (maxNode) {
+            maximalIndependentSet.emplace(node);
+        }
+    }
+}
+
+void assignColoursMIS(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, list<int>>& maximalIndependentSet, int colour) {
+    
+    // Assign colour to nodes in the maximal independent set
+    for (auto const& node : maximalIndependentSet) {
+        colors[node.first] = colour;  
+
+        //Remove coloured nodes from uncolouredNodes, and from neighbours in uncolouredNodes
+        //Encased in a mutex to ensure atomicity
+        lpmutex.lock();
+        uncoloredNodes.erase(node.first);
+        for (auto& neighbor : node.second) {
+            uncoloredNodes[neighbor].remove(node.first);
+        }
+        lpmutex.unlock();
+    }
+
+}
+
+//Sequential implementation of Maximal Independent Set algorithm to check functionality and show a baseline
+vector<int> misSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed) {
+
+    int colour = 0;
+
+    map<int, list<int>> uncoloredNodes = graph;
+
+    while (uncoloredNodes.size() > 0) {
+
+        //Create maximal independent set of vertices 
+        map<int, list<int>> maxIndependentSet{};
+        findMaximalIndependentSet(uncoloredNodes, maxIndependentSet);
+
+        //In each independent set assign the current colour 
+     
+        assignColoursMIS(uncoloredNodes, colors, graph, maxIndependentSet, colour);
+        // Go to the next colour
+        colour++;
+    }
+
+    *maxColUsed = colour;
+
+    return colors;
 }
