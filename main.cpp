@@ -16,8 +16,8 @@ using namespace std;
  *          0 = greedy
  *          1 = JP sequential
  *          2 = JP parallel
- *          3 = SML sequential
- *          4 = SML parallel
+ *          3 = SDL sequential
+ *          4 = SDL parallel
  * )
  */
 
@@ -32,7 +32,7 @@ int main(int argc, char ** argv) {
     string selectedGraph = graphPaths[atoi(argv[1])];
     string finalPath = basePath + selectedGraph;
 
-    string algorithms [] = {"greedy", "JP sequential", "JP parallel","SML sequential","SML parallel"};
+    string algorithms [] = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel"};
     string selectedAlg = algorithms[atoi(argv[2])];
 
     cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
@@ -76,22 +76,22 @@ int main(int argc, char ** argv) {
             break;
         }
         case 3:{
-            vector<int> colorsSMLS = smallestDegreeLastSequentialAssignment(graph, colors, &maxColUsed);
+            vector<int> colorsSDLS = smallestDegreeLastSequentialAssignment(graph, colors, &maxColUsed);
 
 
             //some output just to be sure the application ran properly
             cout << "number of nodes: " << graph.size() << endl;
-            cout << "number of SMLS colors: " << maxColUsed + 1 << endl;
-            cout << "for instance color " << colorsSMLS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+            cout << "number of SDLS colors: " << maxColUsed + 1 << endl;
+            cout << "for instance color " << colorsSDLS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
 
         }
         case 4:{
-            vector<int> colorsSMLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed);
+            vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed);
 
             //some output just to be sure the application ran properly
             cout << "number of nodes: " << graph.size() << endl;
-            cout << "number of SMLP colors: " << maxColUsed + 1 << endl;
-            cout << "for instance color " << colorsSMLP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+            cout << "number of SDLP colors: " << maxColUsed + 1 << endl;
+            cout << "for instance color " << colorsSDLP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
         }
         default:{
             cout << "Selected non-existing algorithm";

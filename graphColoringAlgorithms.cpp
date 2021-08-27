@@ -189,31 +189,49 @@ void assignNumberWorker(map<int, list<int>>& graph, map<int, int>& graphNumberMa
         graphNumberMap[node.first] = rand();
     }
 }
-
 void findIndependentSets(map<int, list<int>> &myUncoloredNodes, map<int, int> &graphNumberMap, map<int, list<int>> &independentSet) {
     //Create independent set of vertices with the highest weights of all neighbours
-    //map<int, list<int>> independentSet{};
-    for (auto const& node : myUncoloredNodes) {
-        bool maxNode = true;
-        for (auto const& neighbour : node.second) {
-            if (graphNumberMap[node.first] < graphNumberMap[neighbour]) {
-                maxNode = false;
-                break;
-            }
-            else if (graphNumberMap[node.first] == graphNumberMap[neighbour]) {
-                int node1= rand();
-                int neighbour1= rand();
-                if (node1 < neighbour1) {
-                    maxNode = false;
-                    break;
-                }
-            }
-        }
-        if (maxNode) {
-            independentSet.emplace(node);
-        }
+    // map<int, list<int>> independentSet{};
+    for(const auto  & node: myUncoloredNodes){
+        findMaxNode(node,myUncoloredNodes,graphNumberMap,independentSet,-1);
     }
-    //return independentSet;
+
+
+    // return independentSet;
+}
+
+void findIndependentSetsParallel(map<int, list<int>> &myUncoloredNodes, map<int, int> &graphNumberMap, map<int, list<int>> &independentSet) {
+    //Create independent set of vertices with the highest weights of all neighbours
+   // map<int, list<int>> independentSet{};
+   vector<thread> threads;
+    for(const auto  & node: myUncoloredNodes){
+        threads.emplace_back([&node,&myUncoloredNodes, &graphNumberMap,&independentSet] { findMaxNode(node,myUncoloredNodes,graphNumberMap,independentSet,-1); });
+    }
+
+
+   // return independentSet;
+}
+
+void findMaxNode(pair<int,list<int>> node,map<int, list<int>> &myUncoloredNodes,map<int, int> &graphNumberMap, map<int, list<int>> &independentSet, int back){
+    bool isMax=true;
+    for(auto neighbor: node.second){
+        if(graphNumberMap[neighbor]>graphNumberMap[node.first]){
+            pair <int,list<int>> node2(neighbor,myUncoloredNodes[neighbor]);
+            isMax=false;
+            findMaxNode(node2,myUncoloredNodes,graphNumberMap,independentSet,-1);
+        }/*if(graphNumberMap[neighbor]==graphNumberMap[node.first]&&neighbor!=back){
+            int nodeRand=rand();
+            int neighborRand=rand();
+            if (neighborRand>nodeRand){
+                pair <int,list<int>> node2(neighbor,myUncoloredNodes[neighbor]);
+                isMax=false;
+                findMaxNode(node2,myUncoloredNodes,graphNumberMap,independentSet,node.first);
+            }
+        }*/
+
+    }
+    if(isMax)
+        independentSet.emplace(node);
 }
 
 void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> &independentSet, int* maxColUsed) {
@@ -264,11 +282,8 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
     int k=minDegree;
     map<int,list<int>> unweightedGraph(graph);
     map<int,list<int>> tempGraph(graph);
-    vector<int> weightedNodes={};
-    //Assign a random number to each vertex
     map<int, int> graphNumberMap = {};
     while(!unweightedGraph.empty()){
-        int actualSize=tempGraph.size();
         for(auto const& node : unweightedGraph ){
             if(node.second.size()<=k){
                 graphNumberMap[node.first]=i;
@@ -278,9 +293,11 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
                 tempGraph.erase(node.first);
             }
         }
-        unweightedGraph.operator=(tempGraph);
-        if(tempGraph.size()<actualSize)
-             i++;
+        if(unweightedGraph.size()>tempGraph.size()){
+            i++;
+            unweightedGraph.operator=(tempGraph);
+        }
+
         k++;
     }
 
