@@ -25,10 +25,10 @@ using namespace std;
 int main(int argc, char ** argv) {
     int maxColUsed = -1;
     string basePath = "./graphs/benchmark/";
-    string graphPaths [] = {"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/, "small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, 
-        "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
+    string graphPaths [] = {/*0)*/"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/, 
+            /*3)*/"small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
             // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
-                            "large/uniprotenc_150m.scc.gra"/*2MB*/, "large/citeseer.scc.gra"/*8MB*/, "large/uniprotenc_22m.scc.gra"/*19MB*/, "large/go_uniprot.gra"/*255MB*/ };
+            /*7)*/"large/uniprotenc_150m.scc.gra"/*2MB*/, "large/citeseer.scc.gra"/*8MB*/, "large/uniprotenc_22m.scc.gra"/*19MB*/, "large/go_uniprot.gra"/*255MB*/ };
     string selectedGraph = graphPaths[atoi(argv[1])];
     string finalPath = basePath + selectedGraph;
 
@@ -37,13 +37,11 @@ int main(int argc, char ** argv) {
 
     cout << endl << "-------------------------------------------------------------------------" << endl;
     cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
-
     map<int, list<int>> graph = readGraph(finalPath);
-
     vector<int> colors = initializeLabels(graph.size());
-
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
 
+    
     switch(atoi(argv[2])){
 
         case 0:{
