@@ -19,6 +19,7 @@ using namespace std;
  *          3 = SDL sequential
  *          4 = SDL parallel
  *          5 = MIS sequential
+ *          6 = MIS parallel
  * )
  */
 
@@ -33,8 +34,7 @@ int main(int argc, char ** argv) {
     string selectedGraph = graphPaths[atoi(argv[1])];
     string finalPath = basePath + selectedGraph;
 
-
-    string algorithms [] = {"greedy", "JP sequential", "JP parallel","SML sequential","SDL parallel", "MIS sequential"};
+    string algorithms [] = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel"};
     string selectedAlg = algorithms[atoi(argv[2])];
 
     cout << endl << "-------------------------------------------------------------------------" << endl;
@@ -102,6 +102,15 @@ int main(int argc, char ** argv) {
             cout << "number of nodes: " << graph.size() << endl;
             cout << "number of MIS colors: " << maxColUsed + 1 << endl;
             cout << "for instance color " << colorsMIS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+        }
+
+        case 6: {
+            vector<int> colorsMISP = misParallelAssignment(graph, colors, &maxColUsed);
+
+            //some output just to be sure the application ran properly
+            cout << "number of nodes: " << graph.size() << endl;
+            cout << "number of MIS colors: " << maxColUsed + 1 << endl;
+            cout << "for instance color " << colorsMISP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
         }
 
         default:{

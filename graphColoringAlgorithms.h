@@ -37,6 +37,10 @@ vector<int> misSequentialAssignment(map<int, list<int>> graph, vector<int> color
 
 void assignColoursMIS(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, list<int>>& maximalIndependentSet, int colour);
 void findMaximalIndependentSet(map<int, list<int>>& myUncoloredNodes, map<int, list<int>>& maximalIndependentSet);
+void findIndependentSetsMIS(map<int, list<int>> myUncoloredNodes, map<int, int>& graphNumberMap, map<int, list<int>>& maximalIndependentSet);
+vector<int> misParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed);
+void assignColoursParallel(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& maximalIndependentSet, int colour);
+void assignColoursWorker(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>> maximalIndependentSet, int colour);
 
 
 #endif //REPO_GRAPHCOLORINGALGORITHMS_H
