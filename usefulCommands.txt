@@ -1,8 +1,23 @@
 COMANDI di test
 
-1) all the algorithms on all the large files
+    1) run all the algorithms on all the large files with runlim
 
-runlim -o ./logs/150Greedy.txt ./a.out 6 0 && runlim -o ./logs/150JP.txt ./a.out 6 2 &&
-runlim -o ./logs/CiteseerGreedy.txt ./a.out 7 0 && runlim -o ./logs/CiteseerJP.txt ./a.out 7 2 &&
-runlim -o ./logs/22Greedy.txt ./a.out 8 0 && runlim -o ./logs/22JP.txt ./a.out 8 2 &&
-runlim -o ./logs/GoGreedy.txt ./a.out 9 0 && runlim -o ./logs/GoJP.txt ./a.out 9 2 
+runlim -o ./logs/150Greedy.txt ./a.out 7 0 && runlim -o ./logs/150JP.txt ./a.out 7 2 && runlim -o ./logs/150SDL.txt ./a.out 7 4 && runlim -o ./logs/150MIS.txt ./a.out 7 6 &&
+runlim -o ./logs/CiteseerGreedy.txt ./a.out 8 0 && runlim -o ./logs/CiteseerJP.txt ./a.out 8 2 && runlim -o ./logs/CiteseerSDL.txt ./a.out 8 4 && runlim -o ./logs/CiteseerMIS.txt ./a.out 8 6 &&
+runlim -o ./logs/22Greedy.txt ./a.out 9 0 && runlim -o ./logs/22JP.txt ./a.out 9 2 && runlim -o ./logs/22SDL.txt ./a.out 9 4 && runlim -o ./logs/22MIS.txt ./a.out 9 6 &&
+runlim -o ./logs/GoGreedy.txt ./a.out 10 0 && runlim -o ./logs/GoJP.txt ./a.out 10 2 && runlim -o ./logs/GoSDL.txt ./a.out 10 4 && runlim -o ./logs/GoMIS.txt ./a.out 10 6 
+
+    2) compile files on linux
+
+g++ -std=c++11 -g -pthread main.cpp util.cpp graphColoringAlgorithms.cpp
+
+    3) simple run
+
+./a.out <graph> <algorithm>
+es
+./a.out 7 2
+
+    4) run menu mode
+./a.out <graph>
+es
+./a.out 7
