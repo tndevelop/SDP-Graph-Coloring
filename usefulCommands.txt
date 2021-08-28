@@ -21,3 +21,6 @@ es
 ./a.out <graph>
 es
 ./a.out 7
+
+    4) run without executing algorithms
+runlim -o ./logs/150IO.txt ./a.out 7 7 && runlim -o ./logs/CiteseerIO.txt ./a.out 8 7 && runlim -o ./logs/22IO.txt ./a.out 9 7 && runlim -o ./logs/GoIO.txt ./a.out 10 7
