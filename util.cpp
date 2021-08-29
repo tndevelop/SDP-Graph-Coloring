@@ -15,6 +15,9 @@ vector<int> initializeLabels( int size) {
 }
 
 map<int, list<int>> readGraph(string path){
+
+    chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
+    cout << "start reading" << endl;
     string line;
     int nodeNumber=-1;
     list<int> linkedNodes;
@@ -32,7 +35,7 @@ map<int, list<int>> readGraph(string path){
         while ( getline (myfile,line) )
         {
             lineCount++;
-            if(lineCount % 10000 == 0)
+            if(lineCount % 100000 == 0)
                 cout << "line: " << lineCount << endl;
             linkedNodes = {};
             tmp = {};
@@ -54,6 +57,9 @@ map<int, list<int>> readGraph(string path){
             }
 
             //insert linked nodes into graph
+            graph[nodeNumber].insert(graph[nodeNumber].end(), linkedNodes.begin(), linkedNodes.end());
+
+            /* //previous vertion, slower. Substitution made on 29/08 at 14:19
             if (graph.count(nodeNumber)) {
                 //key already exists
                 tmp = graph[nodeNumber];
@@ -61,11 +67,13 @@ map<int, list<int>> readGraph(string path){
                 graph[nodeNumber] = tmp;
             }else{
                 graph[nodeNumber] = linkedNodes;
-            }
+            }*/
 
             //link back all the linked nodes to the current node
             for( auto & node : linkedNodes){
+                graph[node].insert(graph[node].begin(), nodeNumber);
 
+                /* //previous vertion, slower. Substitution made on 29/08 at 14:19
                 if (graph.count(node)) {
                     //key already exists
                     tmp = graph[node];
@@ -76,12 +84,15 @@ map<int, list<int>> readGraph(string path){
                     tmp={};
                     tmp.insert(tmp.begin(), nodeNumber);
                     graph[node] = tmp;
-                }
+                }*/
 
             }
         }
         myfile.close();
     }else cout << "Unable to open file";
+
+    chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
+    cout << "Time taken by Read: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
 
     return graph;
 }
