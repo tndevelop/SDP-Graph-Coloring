@@ -57,7 +57,7 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
     map<int,list<int>> nodeWeights={};
 
     for (auto const& node : graph) {
-        int randNumber=rand()%(graph.size()*2);
+        int randNumber=rand()%(graph.size());
         graphNumberMap[node.first] = randNumber;
         nodeWeights[randNumber].emplace_back(node.first);
     }
@@ -67,7 +67,7 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
     while (uncoloredNodes.size() > 0) {
 
         //Create independent set of vertices with the highest weights of all neighbours
-     //   map<int, list<int>> independentSet{};
+        map<int, list<int>> independentSet{};
        // findIndependentSets(uncoloredNodes, graphNumberMap,graphNumberMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
@@ -331,19 +331,16 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
 }
 void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> &nodeWeights, int* maxColUsed) {
     //In each independent set assign the minimum colour not belonging to a neighbour
+    int j=0;
+    map<int,list<int>> neighborColors = {};
     for (int i=nodeWeights.size();i>0;i--) {
         for(const auto node: nodeWeights[i]){
             //Build set of neighbours colours
-            vector<int> neighborColors = {};
-            for (auto& neighbor : graph.at(node)) {
-                if (colors[neighbor] != -1)
-                    neighborColors.push_back(colors[neighbor]);
-            }
 
             //assign lowest color not in use by any neighbor
             int selectedCol = 0;
             while (colors[node] == -1) {
-                if (find(neighborColors.begin(), neighborColors.end(), selectedCol) != neighborColors.end()) {
+                if (find(neighborColors[node].begin(), neighborColors[node].end(), selectedCol) != neighborColors[node].end()) {
                     /* neighborColors contains selectedCol */
                     selectedCol++;
                 }
@@ -359,11 +356,15 @@ void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, 
         lpmutex.lock();
         for (auto& neighbor : uncoloredNodes[node]) {
             uncoloredNodes[neighbor].remove(node);
+            neighborColors[neighbor].emplace_back(selectedCol);
         }
         uncoloredNodes.erase(node);
         lpmutex.unlock();
+        j++;
+
     }
     }
+    cout<<"number of assigned colors: "<<j<<endl;
 }
 vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
     vector<thread> threads;
