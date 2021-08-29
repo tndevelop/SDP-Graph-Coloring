@@ -20,6 +20,7 @@ map<int, list<int>> readGraph(string path){
     list<int> linkedNodes;
     list<int> tmp;
     map<int, list<int>> graph {};
+    int lineCount = 0;
 
     ifstream myfile (path);
     if (myfile.is_open())
@@ -30,7 +31,9 @@ map<int, list<int>> readGraph(string path){
 
         while ( getline (myfile,line) )
         {
-
+            lineCount++;
+            if(lineCount % 10000 == 0)
+                cout << "line: " << lineCount << endl;
             linkedNodes = {};
             tmp = {};
             string delimiter = ":";
