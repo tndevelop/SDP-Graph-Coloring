@@ -34,13 +34,7 @@ int main(int argc, char ** argv) {
     string selectedGraph = graphPaths[atoi(argv[1])];
     string finalPath = basePath + selectedGraph;
 
-    string selectedAlg = algorithms[atoi(argv[2])];
-
-    cout << endl << "-------------------------------------------------------------------------" << endl;
-    cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
-    chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
-
-    cout<<"Starting now"<<endl;
+    string selectedAlg;
 
     bool menuMode = false;
 
@@ -77,7 +71,7 @@ int main(int argc, char ** argv) {
             alg = atoi(argv[2]);
         }
         chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
-
+        cout<<"Starting now"<<endl;
 
         switch(alg){
 
