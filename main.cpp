@@ -20,13 +20,14 @@ using namespace std;
  *          4 = SDL parallel
  *          5 = MIS sequential
  *          6 = MIS parallel
+ *          7 = MIS iterators
  * )
  */
 
 int main(int argc, char ** argv) {
     int maxColUsed = -1;
     string basePath = "./graphs/benchmark/";
-    string algorithms [] = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel"};
+    string algorithms [] = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel", "MIS Iterators"};
     string graphPaths [] = {/*0)*/"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/,
             /*3)*/"small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
             // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
@@ -138,6 +139,16 @@ int main(int argc, char ** argv) {
 
             case 6: {
                 vector<int> colorsMISP = misParallelAssignment(graph, colors, &maxColUsed);
+
+                //some output just to be sure the application ran properly
+                cout << "number of nodes: " << graph.size() << endl;
+                cout << "number of MIS colors: " << maxColUsed + 1 << endl;
+                cout << "for instance color " << colorsMISP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+                break;
+            }
+
+            case 7: {
+                vector<int> colorsMISP = misIteratorsParallelAssignment(graph, colors, &maxColUsed);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
