@@ -54,9 +54,12 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
 
     //Assign a random number to each vertex
     map<int, int> graphNumberMap = {};
+    map<int,list<int>> nodeWeights={};
 
     for (auto const& node : graph) {
-        graphNumberMap[node.first] = rand();
+        int randNumber=rand()%(graph.size()*2);
+        graphNumberMap[node.first] = randNumber;
+        nodeWeights[randNumber].emplace_back(node.first);
     }
 
     map<int, list<int>> uncoloredNodes = graph;
@@ -64,11 +67,11 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
     while (uncoloredNodes.size() > 0) {
 
         //Create independent set of vertices with the highest weights of all neighbours
-        map<int, list<int>> independentSet{};
-        findIndependentSets(uncoloredNodes, graphNumberMap,graphNumberMap, independentSet);
+     //   map<int, list<int>> independentSet{};
+       // findIndependentSets(uncoloredNodes, graphNumberMap,graphNumberMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
-        assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
+        assignColoursSDL(uncoloredNodes, colors, graph, nodeWeights, maxColUsed);
 
     }
 
