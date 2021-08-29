@@ -43,7 +43,8 @@ int main(int argc, char ** argv) {
     vector<int> colors = initializeLabels(graph.size());
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
 
-    
+    cout<<"Starting now"<<endl;
+
     switch(atoi(argv[2])){
 
         case 0:{
@@ -84,7 +85,7 @@ int main(int argc, char ** argv) {
             cout << "number of nodes: " << graph.size() << endl;
             cout << "number of SDLS colors: " << maxColUsed + 1 << endl;
             cout << "for instance color " << colorsSDLS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
-
+            break;
         }
         case 4:{
             vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed);
@@ -93,6 +94,7 @@ int main(int argc, char ** argv) {
             cout << "number of nodes: " << graph.size() << endl;
             cout << "number of SDLP colors: " << maxColUsed + 1 << endl;
             cout << "for instance color " << colorsSDLP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+            break;
         }
 
         case 5: {
@@ -102,6 +104,8 @@ int main(int argc, char ** argv) {
             cout << "number of nodes: " << graph.size() << endl;
             cout << "number of MIS colors: " << maxColUsed + 1 << endl;
             cout << "for instance color " << colorsMIS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+            break;
+
         }
 
         case 6: {
@@ -111,6 +115,8 @@ int main(int argc, char ** argv) {
             cout << "number of nodes: " << graph.size() << endl;
             cout << "number of MIS colors: " << maxColUsed + 1 << endl;
             cout << "for instance color " << colorsMISP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+            break;
+
         }
 
         default:{

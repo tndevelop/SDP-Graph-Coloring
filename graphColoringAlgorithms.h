@@ -20,18 +20,18 @@ void assignRandomNumbers(map<int, list<int>>& graph, map<int, int>& graphNumberM
 
 void workerFunction(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, int>& graphNumberMap, int* maxColUsed, map<int, list<int>> nodesToColour); //vector<map<int, list<int>>>& nodesToColourVect, int i); // 
 
-void findIndependentSets(map<int, list<int>> &uncoloredNodes, map<int, int> &graphNumberMap, map<int, list<int>>& independentSet);
+void findIndependentSets(map<int, list<int>> &uncoloredNodes, map<int, int> &graphNumberMap,map<int, int> &graphNumberRandMap, map<int, list<int>>& independentSet);
 void findIndependentSetsParallel(map<int, list<int>> &uncoloredNodes, map<int, int> &graphNumberMap, map<int, list<int>>& independentSet);
 
 void assignColours(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> &independentSet, int* maxColUsed);
+void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> &independentSet, int* maxColUsed);
 
 vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
 vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
 
 map<int,int> weightNodes(map<int,list<int>> graph);
-void parallelWeighting(pair<int, list<int>> node, map<int, int> graphNumberMap, int i,  map<int,list<int>> unweightedGraph);
-
-void findMaxNode(pair<int,list<int>> node,map<int, list<int>> &myUncoloredNodes,map<int, int> &graphNumberMap, map<int, list<int>> &independentSet,int back);
+void parallelWeighting(pair<int, list<int>> node,map<int, int> &graphNumberMap, int i, map<int,list<int>> &unweightedGraph, map<int,list<int>> &nodeWeights, map<int, int> &graphNumberRandMap,  map<int,list<int>> &graph, map<int,list<int>> &tempGraph);
+void findMaxNode(pair<int,list<int>> node,map<int, list<int>> &myUncoloredNodes,map<int, int> &graphNumberMap,map<int, int> &graphNumberRandMap, map<int, list<int>> &independentSet);
 
 vector<int> misSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed);
 
