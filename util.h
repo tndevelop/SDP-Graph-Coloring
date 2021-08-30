@@ -17,7 +17,7 @@
 
 using namespace std;
 
-map<int, list<int>> readGraph(string path);
+map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap);
 
 vector<int> initializeLabels(int size);
 

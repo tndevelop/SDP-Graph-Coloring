@@ -56,7 +56,9 @@ int main(int argc, char ** argv) {
         cout << "graph " << selectedGraph << " was selected " << endl ;
         }
 
-    map<int, list<int>> graph = readGraph(finalPath);
+    map<int, int> graphNumberMap;
+    map<int, list<int>> randToNodesAssignedMap;
+    map<int, list<int>> graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap);
     vector<int> colors = initializeLabels(graph.size());
 
     do {
