@@ -14,7 +14,7 @@ vector<int> initializeLabels( int size) {
     return labels;
 }
 
-map<int, list<int>> readGraph(string path){
+map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap){
 
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
     cout << "start reading" << endl;
@@ -90,6 +90,15 @@ map<int, list<int>> readGraph(string path){
         }
         myfile.close();
     }else cout << "Unable to open file";
+
+    graphNumberMap = {};
+
+
+    for (auto const& node : graph) {
+        int randNumber=rand()%(graph.size()*2);
+        graphNumberMap[node.first] = randNumber;
+        randToNodesAssignedMap[randNumber].insert(randToNodesAssignedMap[randNumber].begin(), node.first);
+    }
 
     chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
     cout << "Time taken by Read: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;

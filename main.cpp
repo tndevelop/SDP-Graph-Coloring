@@ -1,11 +1,16 @@
+#include "util.h"
+#include "graphColoringAlgorithms.h"
+#include "algorithmMIS.h"
+#include "algorithmGreedy.h"
+#include "algorithmJP.h"
+
 #include <iostream>
 #include <string>
 #include <map>
 #include <vector>
 #include <ctime>
 #include <chrono>
-#include "util.h"
-#include "graphColoringAlgorithms.h"
+
 
 using namespace std;
 
@@ -32,7 +37,7 @@ int main(int argc, char ** argv) {
             /*3)*/"small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
             // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
             /*7)*/"large/uniprotenc_150m.scc.gra"/*2MB*/, "large/citeseer.scc.gra"/*8MB*/, "large/uniprotenc_22m.scc.gra"/*19MB*/, "large/go_uniprot.gra"/*255MB*/,
-            /*11)*/"large/citeseerx.gra" /*176MB*/, "large/cit-Patents.scc.gra" /*162MB*/, };
+            /*11)*/"large/citeseerx.gra" /*176MB*/, "large/cit-Patents.scc.gra" /*162MB*/, "large/uniprotenc_100m.scc.gra" /*232MB*/};
     string selectedGraph = graphPaths[atoi(argv[1])];
     string finalPath = basePath + selectedGraph;
 
@@ -52,7 +57,9 @@ int main(int argc, char ** argv) {
         cout << "graph " << selectedGraph << " was selected " << endl ;
         }
 
-    map<int, list<int>> graph = readGraph(finalPath);
+    map<int, int> graphNumberMap;
+    map<int, list<int>> randToNodesAssignedMap;
+    map<int, list<int>> graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap);
     vector<int> colors = initializeLabels(graph.size());
 
     do {
@@ -97,7 +104,7 @@ int main(int argc, char ** argv) {
                 break;
             }
             case 2:{
-                vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
