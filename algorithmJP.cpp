@@ -14,18 +14,7 @@ condition_variable cvJPColor, cvJPNodes;
 int semJPColor, semJPNodes;
 
 //Parallel implementation of Jones-Plassman algorithm
-vector<int> jonesPlassmannParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed) {
-
-    //In the main thread assign a random number to each vertex
-    chrono::time_point<chrono::system_clock> mappingStart = chrono::system_clock::now();
-
-    map<int, int> graphNumberMap = {};
-    for (auto const& node : graph) {
-        graphNumberMap[node.first] = rand();
-    }
-
-    chrono::time_point<chrono::system_clock> mappingEnd = chrono::system_clock::now();
-    cout << "Time taken to assign random number map: " << chrono::duration_cast<chrono::milliseconds>(mappingEnd - mappingStart).count() << " milliseconds" << endl;
+vector<int> jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int> colors, int* maxColUsed) {
 
     //map<int, list<int>> uncoloredNodes = graph;
     int coloredNodes = 0;
