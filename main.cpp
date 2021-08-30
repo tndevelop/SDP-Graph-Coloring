@@ -64,9 +64,10 @@ int main(int argc, char ** argv) {
     map<int, int> graphNumberMap;
     map<int, list<int>> randToNodesAssignedMap;
     map<int, list<int>> graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap);
-    vector<int> colors = initializeLabels(graph.size());
+
 
     do {
+        vector<int> colors = initializeLabels(graph.size());
         int alg;
         if(menuMode){
             cout << endl << "select algorithm:" << endl;
