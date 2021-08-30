@@ -104,12 +104,13 @@ int main(int argc, char ** argv) {
                 break;
             }
             case 2:{
-                vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed);
+                //vector<int> colorsJP = 
+                jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of JP colors: " << maxColUsed + 1 << endl;
-                cout << "for instance color " << colorsJP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+                cout << "for instance color " << colors[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
 
                 break;
             }

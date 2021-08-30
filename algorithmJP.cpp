@@ -10,20 +10,19 @@
 using namespace std;
 
 mutex jpmutex;
-condition_variable cvJPColor, cvJPNodes;
-int semJPColor, semJPNodes;
+condition_variable cvJPColor;
+int semJPColor;
 
 //Parallel implementation of Jones-Plassman algorithm
-vector<int> jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int> colors, int* maxColUsed) {
+void jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int>& colors, int* maxColUsed) {
 
     //map<int, list<int>> uncoloredNodes = graph;
     int coloredNodes = 0;
 
     //Get maximum number of threads for the system
-    int maxThreads = 2;// thread::hardware_concurrency();
+    int maxThreads = thread::hardware_concurrency();
     cout << "Max threads supported: " << maxThreads << endl;
     semJPColor = maxThreads;
-    semJPNodes = maxThreads;
 
     vector<thread> workers;
 
@@ -39,7 +38,6 @@ vector<int> jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int
         worker.join();
     }
 
-    return colors;
 }
 
 void jpVertexColouring(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int>& colors, int startOffset, int stepSize, int* maxColUsed, int* coloredNodes) {
