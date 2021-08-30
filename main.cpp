@@ -1,11 +1,14 @@
+#include "util.h"
+#include "graphColoringAlgorithms.h"
+#include "algorithmMIS.h"
+
 #include <iostream>
 #include <string>
 #include <map>
 #include <vector>
 #include <ctime>
 #include <chrono>
-#include "util.h"
-#include "graphColoringAlgorithms.h"
+
 
 using namespace std;
 
