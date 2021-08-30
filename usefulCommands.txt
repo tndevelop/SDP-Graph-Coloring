@@ -2,10 +2,10 @@ COMANDI di test
 
     1) run all the algorithms on all the large files with runlim
 
-runlim -o ./logs/150Greedy.txt ./a.out 7 0 && runlim -o ./logs/150JP.txt ./a.out 7 2 && runlim -o ./logs/150SDL.txt ./a.out 7 4 && runlim -o ./logs/150MIS.txt ./a.out 7 6 &&
-runlim -o ./logs/CiteseerGreedy.txt ./a.out 8 0 && runlim -o ./logs/CiteseerJP.txt ./a.out 8 2 && runlim -o ./logs/CiteseerSDL.txt ./a.out 8 4 && runlim -o ./logs/CiteseerMIS.txt ./a.out 8 6 &&
-runlim -o ./logs/22Greedy.txt ./a.out 9 0 && runlim -o ./logs/22JP.txt ./a.out 9 2 && runlim -o ./logs/22SDL.txt ./a.out 9 4 && runlim -o ./logs/22MIS.txt ./a.out 9 6 &&
-runlim -o ./logs/GoGreedy.txt ./a.out 10 0 && runlim -o ./logs/GoJP.txt ./a.out 10 2 && runlim -o ./logs/GoSDL.txt ./a.out 10 4 && runlim -o ./logs/GoMIS.txt ./a.out 10 6 
+runlim -o ./logs/150/150Greedy.txt ./a.out 7 0 ; runlim -o ./logs/150/150JP.txt ./a.out 7 2 ; runlim -o ./logs/150/150SDL.txt ./a.out 7 4 ; runlim -o ./logs/150/150MIS.txt ./a.out 7 6 ; runlim -o ./logs/150/150MISIter.txt ./a.out 7 7 ; 
+runlim -o ./logs/Citeseer/CiteseerGreedy.txt ./a.out 8 0 ; runlim -o ./logs/Citeseer/CiteseerJP.txt ./a.out 8 2 ; runlim -o ./logs/Citeseer/CiteseerSDL.txt ./a.out 8 4 ; runlim -o ./logs/Citeseer/CiteseerMIS.txt ./a.out 8 6 ; runlim -o ./logs/Citeseer/CiteseerMISIter.txt ./a.out 8 7 ; 
+runlim -o ./logs/22/22Greedy.txt ./a.out 9 0 ; runlim -o ./logs/22/22JP.txt ./a.out 9 2 ; runlim -o ./logs/22/22SDL.txt ./a.out 9 4 ; runlim -o ./logs/22/22MIS.txt ./a.out 9 6 ; runlim -o ./logs/22/22MISIter.txt ./a.out 9 7 ; 
+runlim -o ./logs/Go/GoGreedy.txt ./a.out 10 0 ; runlim -o ./logs/Go/GoJP.txt ./a.out 10 2 ; runlim -o ./logs/Go/GoSDL.txt ./a.out 10 4 ; runlim -o ./logs/Go/GoMIS.txt ./a.out 10 6 ; runlim -o ./logs/Go/GoMISIter.txt ./a.out 10 7 
 
     2) compile files on linux
 
@@ -23,4 +23,4 @@ es
 ./a.out 7
 
     4) run without executing algorithms
-runlim -o ./logs/150IO.txt ./a.out 7 7 && runlim -o ./logs/CiteseerIO.txt ./a.out 8 7 && runlim -o ./logs/22IO.txt ./a.out 9 7 && runlim -o ./logs/GoIO.txt ./a.out 10 7
+runlim -o ./logs/150IO.txt ./a.out 7 9 ; runlim -o ./logs/CiteseerIO.txt ./a.out 8 9 ; runlim -o ./logs/22IO.txt ./a.out 9 9 ; runlim -o ./logs/GoIO.txt ./a.out 10 9 ; runlim -o ./logs/CiteseerxIO.txt ./a.out 11 9 ; runlim -o ./logs/Cit-PatensIO.txt ./a.out 12 9
