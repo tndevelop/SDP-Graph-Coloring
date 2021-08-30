@@ -57,7 +57,7 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
     map<int,list<int>> nodeWeights={};
 
     for (auto const& node : graph) {
-        int randNumber=rand()%(graph.size());
+        int randNumber=rand()%(graph.size()/5);
         graphNumberMap[node.first] = randNumber;
         nodeWeights[randNumber].emplace_back(node.first);
     }
@@ -71,7 +71,7 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector
        // findIndependentSets(uncoloredNodes, graphNumberMap,graphNumberMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
-        assignColoursSDL(uncoloredNodes, colors, graph, nodeWeights, maxColUsed);
+        assignColoursSDL(uncoloredNodes, colors, nodeWeights, maxColUsed);
 
     }
 
@@ -286,26 +286,27 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
     int i=1;
     int k=0;
     map<int,list<int>> unweightedGraph(graph);
-    map<int,list<int>> tempGraph(graph);
     map<int,list<int>> nodeWeights={};
-    map<int, int> graphNumberMap = {};
     map<int, int> graphNumberRandMap = {};
+    vector<int> toBeRemoved={};
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
     while(!unweightedGraph.empty()){
         for(auto const& node : unweightedGraph ){
             if(node.second.size()<=k){
-                graphNumberMap[node.first]=i;
                 nodeWeights[i].emplace_back(node.first);
                 graphNumberRandMap[node.first]=rand()%(graph.size()*2);
                 for(const auto neighbour : node.second){
-                    tempGraph[neighbour].remove(node.first);
+                    unweightedGraph[neighbour].remove(node.first);
                 }
-                tempGraph.erase(node.first);
+                toBeRemoved.emplace_back(node.first);
             }
         }
-        if(unweightedGraph.size()>tempGraph.size()){
+        if(toBeRemoved.size()>0){
             i++;
-            unweightedGraph.operator=(tempGraph);
+            for(auto node : toBeRemoved){
+                unweightedGraph.erase(node);
+            }
+            toBeRemoved.clear();
         }
 
         k++;
@@ -322,7 +323,7 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
  //       findIndependentSets(uncoloredNodes, graphNumberMap, graphNumberRandMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
-        assignColoursSDL(uncoloredNodes, colors, graph, nodeWeights, maxColUsed);
+        assignColoursSDL(uncoloredNodes, colors,  nodeWeights, maxColUsed);
 
     }
 
@@ -330,27 +331,32 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
 
 
 }
-void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &graph, map<int, list<int>> &nodeWeights, int* maxColUsed) {
+void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &nodeWeights, int* maxColUsed) {
     //In each independent set assign the minimum colour not belonging to a neighbour
-    int j=0;
     map<int,list<int>> neighborColors = {};
     for (int i=nodeWeights.size();i>0;i--) {
         for(const auto node: nodeWeights[i]){
+            neighborColors[node].sort();
+
             //Build set of neighbours colours
 
             //assign lowest color not in use by any neighbor
             int selectedCol = 0;
-            while (colors[node] == -1) {
-                if (find(neighborColors[node].begin(), neighborColors[node].end(), selectedCol) != neighborColors[node].end()) {
-                    /* neighborColors contains selectedCol */
-                    selectedCol++;
+            int previous=0;
+                for(auto neighborCol : neighborColors[node])
+                {
+                    if(neighborCol-previous>1){
+                        selectedCol=previous+1;
+                        break;
+                    }else{
+                        selectedCol++;
+                    }
+                    previous=neighborCol;
                 }
-                else {
                     colors[node] = selectedCol;
                     if (selectedCol > *maxColUsed)
                         *maxColUsed = selectedCol;
-                }
-            }
+
 
         //Remove coloured nodes from uncolouredNodes, and from neighbours in uncolouredNodes
         //Encased in a mutex to ensure atomicity
@@ -361,11 +367,10 @@ void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, 
         }
         uncoloredNodes.erase(node);
         lpmutex.unlock();
-        j++;
 
     }
     }
-    cout<<"number of assigned colors: "<<j<<endl;
+
 }
 vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
     vector<thread> threads;
@@ -407,7 +412,7 @@ vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vect
         //       findIndependentSets(uncoloredNodes, graphNumberMap, graphNumberRandMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
-        assignColoursSDL(uncoloredNodes, colors, graph, nodeWeights, maxColUsed);
+        assignColoursSDL(uncoloredNodes, colors,  nodeWeights, maxColUsed);
     }
 
     return colors;
