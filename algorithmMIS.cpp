@@ -5,6 +5,7 @@
 #include <future>
 #include <vector>
 #include <condition_variable>
+#include <chrono>
 
 using namespace std;
 
@@ -76,44 +77,35 @@ vector<int> misIteratorsParallelAssignment(map<int, list<int>>& graph, vector<in
     int colour = 0;
 
     //In the main thread assign a random number to each vertex
-    // Tommaso to possibly do this during the reading phase
+    chrono::time_point<chrono::system_clock> mappingStart = chrono::system_clock::now();
+
     map<int, int> graphNumberMap = {};
-    assignRandomNumbersIters(graph, graphNumberMap);
+    assignRandomNumber(graph, graphNumberMap);
+
+    chrono::time_point<chrono::system_clock> mappingEnd = chrono::system_clock::now();
+    cout << "Time taken to assign random number map: " << chrono::duration_cast<chrono::milliseconds>(mappingEnd - mappingStart).count() << " milliseconds" << endl;
 
     map<int, list<int>> uncoloredNodes = graph;
 
     //Get maximum number of threads for the system
-    int maxThreads = 1; // thread::hardware_concurrency();
+    int maxThreads = thread::hardware_concurrency();
     cout << "Max threads supported: " << maxThreads << endl;
     semMISColor = maxThreads;
     semMISNodes = maxThreads;
 
-    //while (uncoloredNodes.size() > 0) {
+    vector<thread> workers;
 
-    //    int nodesLeft = uncoloredNodes.size();
+    for (int i = 0; i < maxThreads; i++) {
 
-        // Calculate maximal independent set
-    //    map<int, list<int>> maxIndependentSet{};
+        //Create threads to find and colour independent sets
+        workers.emplace_back([&uncoloredNodes, &graphNumberMap, &colors, &colour, i, maxThreads] {findAndColourIndependentSetsMIS(uncoloredNodes, graphNumberMap, colors, &colour, i, maxThreads); });
 
-    //    if (nodesLeft >= maxThreads) {
-            vector<thread> workers;
+    }
 
-            for (int i = 0; i < maxThreads; i++) {
-
-                //Create thread for set of uncoloured nodes
-                workers.emplace_back([&uncoloredNodes, &graphNumberMap, &colors, &colour, i, maxThreads] {findAndColourIndependentSetsMIS(uncoloredNodes, graphNumberMap, colors, &colour, i, maxThreads); });
-
-            }
-
-            //Add independent sets together to form maximal set
-            for (auto& worker : workers) {
-                worker.join();
-            }
-
-        // Go to the next colour
-       // colour++;
-    
-        //}
+    //Wait for all threads to finish
+    for (auto& worker : workers) {
+        worker.join();
+    }
 
     *maxColUsed = colour;
 
@@ -171,22 +163,20 @@ void findAndColourIndependentSetsMIS(map<int, list<int>>& uncoloredNodes, map<in
             unique_lock<mutex> lock(mismutex);
             semMISColor--;
             if (semMISColor == 0) {
-                semMISColor = numThreads;
                 // Go to next colour
-                *colour++;
+                int nextCol = *colour + 1;
+                *colour = nextCol;
                 cvMISColor.notify_all();
             }
             else {
                 // Wait here for other threads to finish colouring
                 cvMISColor.wait(lock);
             }
-            //mismutex.unlock(); // Not sure if required
         } 
 
-        // Then remove nodes from uncoloured nodes
+        // Then remove nodes from uncoloured nodes       
         {
             unique_lock<mutex> lock(mismutex); 
-
             //Remove coloured nodes from uncolouredNodes, and from neighbours in uncolouredNodes
             //Encased in a mutex to ensure atomicity
             for (auto& node : independentSet) {
@@ -199,14 +189,20 @@ void findAndColourIndependentSetsMIS(map<int, list<int>>& uncoloredNodes, map<in
             // Signal completion of node removal
             semMISNodes--;
             if (semMISNodes == 0) {
-                semMISNodes = numThreads;
+                if (uncoloredNodes.size() < numThreads) {
+                    semMISNodes = uncoloredNodes.size();
+                    semMISColor = uncoloredNodes.size();
+                }
+                else {
+                    semMISNodes = numThreads;
+                    semMISColor = numThreads;
+                }  
                 cvMISNodes.notify_all();
             }
             else {
                 // Wait here for other threads to finish removing nodes
                 cvMISNodes.wait(lock);
             }
-            //mismutex.unlock(); // Not sure if required
         }
 
     }
@@ -319,9 +315,17 @@ void assignColoursWorkerIters(map<int, list<int>>& uncoloredNodes, vector<int>& 
 
 }
 
+void assignRandomNumber(map<int, list<int>>& graph, map<int, int>& graphNumberMap) {
+
+    for (auto const& node : graph) {
+        graphNumberMap[node.first] = rand();
+    }
+
+}
+
 void assignRandomNumbersIters(map<int, list<int>>& graph, map<int, int>& graphNumberMap) {
 
-    int maxThreads = thread::hardware_concurrency();
+    int maxThreads =  thread::hardware_concurrency();
 
     vector<thread> workers;
 
