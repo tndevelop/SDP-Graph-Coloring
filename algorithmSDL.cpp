@@ -126,7 +126,7 @@ vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vect
         sdlmutex.lock();
         for(int i=0;i<maxThreads;i++){
 
-                workers.emplace_back([node,&graphNumberMap,i,&unweightedGraph,&nodeWeights,&graphNumberRandMap,&graph,&tempGraph] {parallelWeighting(node,graphNumberMap,i,unweightedGraph,nodeWeights,graphNumberRandMap,graph,tempGraph);});
+             //   workers.emplace_back([node,&graphNumberMap,i,&unweightedGraph,&nodeWeights,&graphNumberRandMap,&graph,&tempGraph] {parallelWeighting(node,graphNumberMap,i,unweightedGraph,nodeWeights,graphNumberRandMap,graph,tempGraph);});
 
         }
         sdlmutex.unlock();
@@ -159,6 +159,7 @@ vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vect
 
 
 void parallelWeighting(pair<int, list<int>> node,map<int, int> &graphNumberMap, int i, map<int,list<int>> &unweightedGraph, map<int,list<int>> &nodeWeights, map<int, int> &graphNumberRandMap,  map<int,list<int>> &graph, map<int,list<int>> &tempGraph){
+  int k=0;
     if(node.second.size()<=k){
     graphNumberMap[node.first]=i;
     nodeWeights[i].emplace_back(node.first);
