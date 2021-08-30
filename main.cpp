@@ -3,12 +3,12 @@
 #include "algorithmMIS.h"
 #include "algorithmGreedy.h"
 #include "algorithmJP.h"
+#include "algorithmSDL.h"
 
 #include <iostream>
 #include <string>
 #include <map>
 #include <vector>
-#include <ctime>
 #include <chrono>
 
 
