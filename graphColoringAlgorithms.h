@@ -12,8 +12,6 @@ using namespace std;
 
 vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
 
-vector<int> jonesPlassmannParallelAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
-
 void assignNumberWorker(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
 
 void assignRandomNumbers(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
@@ -37,13 +35,5 @@ void findIndependentSetsMIS(map<int, list<int>> myUncoloredNodes, map<int, int>&
 vector<int> misParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed);
 void assignColoursParallel(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& maximalIndependentSet, int colour);
 void assignColoursWorker(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>> maximalIndependentSet, int colour);
-
-
-//void findIndependentSetsMISIters(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, map<int, list<int>>& maxIndependentSet, int startOffset, int stepSize);
-//vector<int> misIteratorsParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed);
-//void assignColoursWorkerIters(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& maximalIndependentSet, int colour, int startOffset, int stepSize);
-//void assignColoursParallelIters(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& maximalIndependentSet, int colour);
-//void assignNumberWorkerIters(map<int, list<int>>& graph, map<int, int>& graphNumberMap, int startOffset, int stepSize);
-//void assignRandomNumbersIters(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
 
 #endif //REPO_GRAPHCOLORINGALGORITHMS_H

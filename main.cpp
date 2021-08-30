@@ -2,6 +2,7 @@
 #include "graphColoringAlgorithms.h"
 #include "algorithmMIS.h"
 #include "algorithmGreedy.h"
+#include "algorithmJP.h"
 
 #include <iostream>
 #include <string>
