@@ -18,5 +18,6 @@ void assignColoursWorkerIters(map<int, list<int>>& uncoloredNodes, vector<int>& 
 void assignColoursParallelIters(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& maximalIndependentSet, int colour);
 void assignNumberWorkerIters(map<int, list<int>>& graph, map<int, int>& graphNumberMap, int startOffset, int stepSize);
 void assignRandomNumbersIters(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
+void findAndColourIndependentSetsMIS(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, vector<int>& colors, int* colour, int startOffset, int stepSize);
 
 #endif //REPO_ALGORITHMMIS_H

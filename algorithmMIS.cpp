@@ -4,10 +4,13 @@
 #include <mutex>
 #include <future>
 #include <vector>
+#include <condition_variable>
 
 using namespace std;
 
-mutex mismutex;
+mutex mismutex, barrierMutex;
+condition_variable cvMISColor, cvMISNodes;
+int semMISColor, semMISNodes;
 
 //Sequential implementation of Maximal Independent Set algorithm to check functionality and show a baseline
 vector<int> misSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed) {
@@ -80,25 +83,25 @@ vector<int> misIteratorsParallelAssignment(map<int, list<int>>& graph, vector<in
     map<int, list<int>> uncoloredNodes = graph;
 
     //Get maximum number of threads for the system
-    int maxThreads = thread::hardware_concurrency();
+    int maxThreads = 1; // thread::hardware_concurrency();
     cout << "Max threads supported: " << maxThreads << endl;
+    semMISColor = maxThreads;
+    semMISNodes = maxThreads;
 
-    while (uncoloredNodes.size() > 0) {
+    //while (uncoloredNodes.size() > 0) {
 
-        int nodesLeft = uncoloredNodes.size();
+    //    int nodesLeft = uncoloredNodes.size();
 
         // Calculate maximal independent set
-        map<int, list<int>> maxIndependentSet{};
+    //    map<int, list<int>> maxIndependentSet{};
 
-        if (nodesLeft >= maxThreads) {
+    //    if (nodesLeft >= maxThreads) {
             vector<thread> workers;
-
-            int stepSize = nodesLeft / maxThreads;
 
             for (int i = 0; i < maxThreads; i++) {
 
                 //Create thread for set of uncoloured nodes
-                workers.emplace_back([&uncoloredNodes, &graphNumberMap, &maxIndependentSet, i, maxThreads] {findIndependentSetsMISIters(uncoloredNodes, graphNumberMap, maxIndependentSet, i, maxThreads); });
+                workers.emplace_back([&uncoloredNodes, &graphNumberMap, &colors, &colour, i, maxThreads] {findAndColourIndependentSetsMIS(uncoloredNodes, graphNumberMap, colors, &colour, i, maxThreads); });
 
             }
 
@@ -107,22 +110,107 @@ vector<int> misIteratorsParallelAssignment(map<int, list<int>>& graph, vector<in
                 worker.join();
             }
 
-        }
-        else { //For last nodes where the number of nodes is less than the number of threads just use one thread
-            thread worker([&uncoloredNodes, &graphNumberMap, &maxIndependentSet] {findIndependentSetsMISIters(uncoloredNodes, graphNumberMap, maxIndependentSet, 0, 1); });
-            worker.join();
-        }
-
-        //In each independent set assign the current colour 
-        assignColoursParallelIters(uncoloredNodes, colors, maxIndependentSet, colour);
-
         // Go to the next colour
-        colour++;
-    }
+       // colour++;
+    
+        //}
 
     *maxColUsed = colour;
 
     return colors;
+}
+
+void findAndColourIndependentSetsMIS(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, vector<int>& colors, int* colour, int startOffset, int stepSize) {
+    
+    int numThreads = stepSize; 
+
+    while (uncoloredNodes.size() > startOffset) {
+
+        //Create independent set of vertices with the highest weights of all neighbours
+        map<int, list<int>> independentSet{};
+
+        // Step through the nodes with the step size of number of threads
+        map<int, list<int>>::iterator iter = uncoloredNodes.begin();
+        advance(iter, startOffset);
+
+        int i = startOffset;
+        do {
+            bool maxNode = true;
+            for (auto const& neighbour : iter->second) {
+                if (graphNumberMap[iter->first] < graphNumberMap[neighbour]) {
+                    maxNode = false;
+                    break;
+                }
+                else if (graphNumberMap[iter->first] == graphNumberMap[neighbour]) {
+                    if (iter->first < neighbour) {
+                        maxNode = false;
+                        break;
+                    }
+                }
+            }
+
+            if (maxNode) {
+                independentSet.emplace(*iter);
+                // Colour node
+                mismutex.lock();
+                colors[iter->first] = *colour;
+                mismutex.unlock();
+            }
+
+            i += stepSize;
+            //Go to next node of thread
+            if (i >= uncoloredNodes.size()) {
+                break;
+            }
+            advance(iter, stepSize);
+
+        } while (i < uncoloredNodes.size());
+
+        // Signal completion of colouring set
+        {
+            unique_lock<mutex> lock(mismutex);
+            semMISColor--;
+            if (semMISColor == 0) {
+                semMISColor = numThreads;
+                // Go to next colour
+                *colour++;
+                cvMISColor.notify_all();
+            }
+            else {
+                // Wait here for other threads to finish colouring
+                cvMISColor.wait(lock);
+            }
+            //mismutex.unlock(); // Not sure if required
+        } 
+
+        // Then remove nodes from uncoloured nodes
+        {
+            unique_lock<mutex> lock(mismutex); 
+
+            //Remove coloured nodes from uncolouredNodes, and from neighbours in uncolouredNodes
+            //Encased in a mutex to ensure atomicity
+            for (auto& node : independentSet) {
+                uncoloredNodes.erase(node.first);
+                for (auto& neighbor : node.second) {
+                    uncoloredNodes[neighbor].remove(node.first);
+                }
+            }
+
+            // Signal completion of node removal
+            semMISNodes--;
+            if (semMISNodes == 0) {
+                semMISNodes = numThreads;
+                cvMISNodes.notify_all();
+            }
+            else {
+                // Wait here for other threads to finish removing nodes
+                cvMISNodes.wait(lock);
+            }
+            //mismutex.unlock(); // Not sure if required
+        }
+
+    }
+
 }
 
 
