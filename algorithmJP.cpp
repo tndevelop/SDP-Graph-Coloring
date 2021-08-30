@@ -44,7 +44,7 @@ void jpVertexColouring(map<int, list<int>>& graph, map<int, int>& graphNumberMap
     
     int numThreads = stepSize; 
 
-    while (*coloredNodes < colors.size() && *coloredNodes + startOffset <= colors.size()  ) {
+    while (*coloredNodes < colors.size()) {
 
         // Step through the nodes with the step size of number of threads
         map<int, list<int>>::iterator iter = graph.begin();
