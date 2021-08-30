@@ -8,7 +8,7 @@
 
 using namespace std;
 
-vector<int> greedyAssignment(map<int, list<int>> map, vector<int> vector, int *maxColUsed);
+
 
 vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
 
