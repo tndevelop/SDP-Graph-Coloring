@@ -14,13 +14,13 @@ condition_variable cvJPColor;
 int semJPColor;
 
 //Parallel implementation of Jones-Plassman algorithm
-void jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int>& colors, int* maxColUsed) {
+void jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int>& colors, int* maxColUsed, int nThreads) {
 
     //map<int, list<int>> uncoloredNodes = graph;
     int coloredNodes = 0;
 
     //Get maximum number of threads for the system
-    int maxThreads = thread::hardware_concurrency();
+    int maxThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
     cout << "Max threads supported: " << maxThreads << endl;
     semJPColor = maxThreads;
 

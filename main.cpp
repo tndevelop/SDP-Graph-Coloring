@@ -44,12 +44,16 @@ int main(int argc, char ** argv) {
     string selectedAlg;
 
     bool menuMode = false;
+    int nThreads = -1;
 
     if(argc >= 3){
 
         selectedAlg = atoi(argv[2]) <= (sizeof(algorithms) / sizeof(algorithms[0])) ? algorithms[atoi(argv[2])] : "NONE";
         cout << endl << "-------------------------------------------------------------------------" << endl;
         cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
+        if(argc >= 4){
+            nThreads = atoi(argv[3]);
+        }
     }else{
         menuMode = true;
 
@@ -74,7 +78,12 @@ int main(int argc, char ** argv) {
             cin >> alg;
             if(alg >= sizeof(algorithms))
                 break;
-            cout << "running " << algorithms[alg] << " algorithm on graph " << selectedGraph << endl << endl ;
+
+            if(alg != 0) {
+                cout << endl << "select number of threads:" << endl;
+                cin >> nThreads;
+            }
+            cout << "running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
         }else{
             alg = atoi(argv[2]);
         }
@@ -105,7 +114,7 @@ int main(int argc, char ** argv) {
             }
             case 2:{
                 //vector<int> colorsJP = 
-                jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed);
+                jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
@@ -126,7 +135,7 @@ int main(int argc, char ** argv) {
 
             }
             case 4:{
-                vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
@@ -146,7 +155,7 @@ int main(int argc, char ** argv) {
             }
 
             case 6: {
-                vector<int> colorsMISP = misParallelAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsMISP = misParallelAssignment(graph, colors, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
@@ -156,7 +165,7 @@ int main(int argc, char ** argv) {
             }
 
             case 7: {
-                vector<int> colorsMISP = misIteratorsParallelAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsMISP = misIteratorsParallelAssignment(graph, colors, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;

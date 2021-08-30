@@ -48,9 +48,9 @@ void workerFunction(map<int, list<int>>& uncoloredNodes, vector<int>& colors, ma
     assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
 }
 
-void assignRandomNumbers(map<int, list<int>>& graph, map<int, int>& graphNumberMap) {
+void assignRandomNumbers(map<int, list<int>>& graph, map<int, int>& graphNumberMap, int nThreads) {
 
-    int maxThreads = thread::hardware_concurrency();
+    int maxThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
 
     vector<thread> workers;
 
@@ -253,7 +253,7 @@ void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, 
     }
     }
 }
-vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
+vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed, int nThreads){
     vector<thread> threads;
     int i=1;
     int k=0;
@@ -341,18 +341,18 @@ void findIndependentSetsMIS(map<int, list<int>> myUncoloredNodes, map<int, int>&
 }
 
 //Parallel implementation of Maximal Independent Set algorithm to check functionality and show a baseline
-vector<int> misParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed) {
+vector<int> misParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed, int nThreads) {
 
     int colour = 0;
 
     //In the main thread assign a random number to each vertex
     map<int, int> graphNumberMap = {};
-    assignRandomNumbers(graph, graphNumberMap); 
+    assignRandomNumbers(graph, graphNumberMap, nThreads);
 
     map<int, list<int>> uncoloredNodes = graph;
 
     //Get maximum number of threads for the system
-    int maxThreads = thread::hardware_concurrency();
+    int maxThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
     cout << "Max threads supported: " << maxThreads << endl;
 
     while (uncoloredNodes.size() > 0) {
@@ -401,7 +401,7 @@ vector<int> misParallelAssignment(map<int, list<int>>& graph, vector<int> colors
 
         //In each independent set assign the current colour 
         //assignColoursMIS(uncoloredNodes, colors, graph, maxIndependentSet, colour); // Sequential
-        assignColoursParallel(uncoloredNodes, colors, maxIndependentSet, colour);
+        assignColoursParallel(uncoloredNodes, colors, maxIndependentSet, colour, nThreads);
 
         // Go to the next colour
         colour++;
@@ -412,9 +412,9 @@ vector<int> misParallelAssignment(map<int, list<int>>& graph, vector<int> colors
     return colors;
 }
 
-void assignColoursParallel(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& maximalIndependentSet, int colour) {
+void assignColoursParallel(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& maximalIndependentSet, int colour, int nThreads) {
 
-    int maxThreads = thread::hardware_concurrency();
+    int maxThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
 
     vector<thread> workers;
 
