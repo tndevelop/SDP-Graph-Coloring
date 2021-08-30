@@ -20,4 +20,6 @@ void assignNumberWorkerIters(map<int, list<int>>& graph, map<int, int>& graphNum
 void assignRandomNumbersIters(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
 void findAndColourIndependentSetsMIS(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, vector<int>& colors, int* colour, int startOffset, int stepSize);
 
+void assignRandomNumber(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
+
 #endif //REPO_ALGORITHMMIS_H
