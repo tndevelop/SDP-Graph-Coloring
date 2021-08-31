@@ -105,3 +105,50 @@ map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<in
 
     return graph;
 }
+
+void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string &selectedGraph, string &finalPath, int argc, char ** argv, vector<string> algorithms, vector<string> graphPaths, string basePath) {
+    selectedGraph = graphPaths[atoi(argv[1])];
+    finalPath = basePath + selectedGraph;
+    if(argc >= 3){
+
+        selectedAlg = atoi(argv[2]) <= (sizeof(algorithms) / sizeof(algorithms[0])) ? algorithms[atoi(argv[2])] : "NONE";
+        cout << endl << "-------------------------------------------------------------------------" << endl;
+        cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
+        if(argc >= 4){
+            nThreads = atoi(argv[3]);
+        }
+    }else{
+        menuMode = true;
+
+        cout << "menu mode selected, you'll be asked to choose an algorithm shortly" << endl;
+        cout << "graph " << selectedGraph << " was selected " << endl ;
+    }
+}
+
+bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> algorithms, int nThreads, string selectedGraph, int argc,
+                 char **argv, map<int, list<int>> graph) {
+    colors = initializeLabels(graph.size());
+    int i=0;
+    if(menuMode){
+        for(const string &algorithm : algorithms) {
+            cout << i << ": " << algorithms[i];
+            i%2 == 1 ? cout << endl : cout << "\t\t";
+            i++;
+        }
+        cout << "any other number to exit" << endl;
+        cin >> alg;
+        if(alg >= sizeof(algorithms))
+            return false;
+
+        if(alg != 0) {
+            cout << endl << "select number of threads:" << endl;
+            cin >> nThreads;
+        }
+        cout << "running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
+    }else{
+        alg = atoi(argv[2]);
+    }
+    return true;
+
+}
+
