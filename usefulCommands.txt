@@ -9,7 +9,7 @@ runlim -o ./logs/Go/GoGreedy.txt ./a.out 10 0 ; runlim -o ./logs/Go/GoJP.txt ./a
 
     2) compile files on linux
 
-g++ -std=c++11 -g -pthread main.cpp util.cpp graphColoringAlgorithms.cpp
+g++ -std=c++11 -g -pthread main.cpp util.cpp algorithmMIS.cpp algorithmGreedy.cpp algorithmJP.cpp algorithmSDL.cpp 
 
     3) simple run
 
