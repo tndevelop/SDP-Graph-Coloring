@@ -157,33 +157,35 @@ parallelWeighting(int threadN, map<int, list<int>> &unweightedGraph, map<int, li
     while (!unweightedGraph.empty()) {
         for (int j = threadN * (unweightedGraph.size() / maxThreads);
              j < ((unweightedGraph.size() / maxThreads) * threadN + 1); j++) {
-            sdlSemaphore++;
+            sdlmutex2.lock();
             if (unweightedGraph[j].size() <= cons) {
+                sdlmutex2.unlock();
                 nodeWeights[val].emplace_back(j);
-                sdlSemaphore--;
-                if (sdlSemaphore == 0) {
-                    sdlSemaphore = maxThreads;
-                    semSDL.notify_all();
-                } else {
-                    semSDL.wait(lockko);
-                }
+                sdlmutex.lock();
                 for (const auto neighbour : unweightedGraph[j]) {
                     unweightedGraph[neighbour].remove(j);
                 }
+                sdlmutex.unlock();
                 toBeRemoved.emplace_back(j);
-            }
-            sdlSemaphore--;
-        }
-        sdlmutex2.lock();
-        if (toBeRemoved.size() > 0) {
-            val++;
+            }else sdlmutex2.unlock();
 
-            for (auto node : toBeRemoved) {
-                unweightedGraph.erase(node);
-            }
-            toBeRemoved.clear();
         }
-        sdlmutex2.unlock();
+
+        sdlSemaphore--;
+        if (sdlSemaphore == 0) {
+            if (toBeRemoved.size() > 0) {
+                val++;
+                for (auto node : toBeRemoved) {
+                    unweightedGraph.erase(node);
+                }
+                toBeRemoved.clear();
+            }
+            sdlSemaphore = maxThreads;
+            semSDL.notify_all();
+        } else {
+            semSDL.wait(lockko);
+        }
+
         sdlSemaphore2--;
         if (sdlSemaphore2 == 0) {
             sdlSemaphore2 = maxThreads;
