@@ -72,7 +72,7 @@ void assignColoursMIS(map<int, list<int>>& uncoloredNodes, vector<int>& colors, 
 }
 
 //Parallel implementation of Maximal Independent Set algorithm to check functionality and show a baseline
-vector<int> misIteratorsParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed, int nThreads) {
+vector<int> misParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed, int nThreads) {
 
     int colour = 0;
 

@@ -10,6 +10,7 @@
 #include <map>
 #include <vector>
 #include <chrono>
+#include <array>
 
 
 using namespace std;
@@ -25,69 +26,34 @@ using namespace std;
  *          4 = SDL parallel
  *          5 = MIS sequential
  *          6 = MIS parallel
- *          7 = MIS iterators
  * )
  */
 
+
 int main(int argc, char ** argv) {
-    int maxColUsed = -1;
-    string basePath = "./graphs/benchmark/";
-    string algorithms [] = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel", "MIS Iterators"};
-    string graphPaths [] = {/*0)*/"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/,
+    int alg, nThreads = -1, maxColUsed = -1;
+    string selectedAlg, selectedGraph, finalPath, basePath = "./graphs/benchmark/";
+    vector<string> algorithms  = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel"};
+    vector<string> graphPaths = {/*0)*/"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/,
             /*3)*/"small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
             // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
             /*7)*/"large/uniprotenc_150m.scc.gra"/*2MB*/, "large/citeseer.scc.gra"/*8MB*/, "large/uniprotenc_22m.scc.gra"/*19MB*/, "large/go_uniprot.gra"/*255MB*/,
             /*11)*/"large/citeseerx.gra" /*176MB*/, "large/cit-Patents.scc.gra" /*162MB*/, "large/uniprotenc_100m.scc.gra" /*232MB*/};
-    string selectedGraph = graphPaths[atoi(argv[1])];
-    string finalPath = basePath + selectedGraph;
-
-    string selectedAlg;
 
     bool menuMode = false;
-    int nThreads = -1;
-
-    if(argc >= 3){
-
-        selectedAlg = atoi(argv[2]) <= (sizeof(algorithms) / sizeof(algorithms[0])) ? algorithms[atoi(argv[2])] : "NONE";
-        cout << endl << "-------------------------------------------------------------------------" << endl;
-        cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
-        if(argc >= 4){
-            nThreads = atoi(argv[3]);
-        }
-    }else{
-        menuMode = true;
-
-        cout << "menu mode selected, you'll be asked to choose an algorithm shortly" << endl;
-        cout << "graph " << selectedGraph << " was selected " << endl ;
-        }
-
+    vector<int> colors;
     map<int, int> graphNumberMap;
-    map<int, list<int>> randToNodesAssignedMap;
-    map<int, list<int>> graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap);
+    map<int, list<int>> randToNodesAssignedMap, graph;
 
+    parametersSetup(selectedAlg, nThreads, menuMode, selectedGraph, finalPath, argc, argv, algorithms, graphPaths, basePath);
+
+    graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap);
 
     do {
-        vector<int> colors = initializeLabels(graph.size());
-        int alg;
-        if(menuMode){
-            cout << endl << "select algorithm:" << endl;
 
-            for(int i =0 ; i< (sizeof(algorithms) / sizeof(algorithms[0]))  ; i++) {
-                cout << i << ": " << algorithms[i] << endl;
-            }
-            cout << "any other number to exit" << endl;
-            cin >> alg;
-            if(alg >= sizeof(algorithms))
-                break;
+        if(!prerunSetup(colors, alg, menuMode, algorithms, nThreads, selectedGraph, argc, argv, graph))
+            break;
 
-            if(alg != 0) {
-                cout << endl << "select number of threads:" << endl;
-                cin >> nThreads;
-            }
-            cout << "running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
-        }else{
-            alg = atoi(argv[2]);
-        }
         chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
         cout<<"Starting now"<<endl;
 
@@ -104,7 +70,7 @@ int main(int argc, char ** argv) {
                 break;
             }
             case 1:{
-                vector<int> colorsJPS = jonesPlassmannSequentialAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsJPS = jonesPlassmannSequentialAssignment(graph, graphNumberMap, colors, &maxColUsed);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
@@ -114,13 +80,12 @@ int main(int argc, char ** argv) {
                 break;
             }
             case 2:{
-                //vector<int> colorsJP = 
-                jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
+                vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of JP colors: " << maxColUsed + 1 << endl;
-                cout << "for instance color " << colors[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+                cout << "for instance color " << colorsJP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
 
                 break;
             }
@@ -165,16 +130,6 @@ int main(int argc, char ** argv) {
                 break;
             }
 
-            case 7: {
-                vector<int> colorsMISP = misIteratorsParallelAssignment(graph, colors, &maxColUsed, nThreads);
-
-                //some output just to be sure the application ran properly
-                cout << "number of nodes: " << graph.size() << endl;
-                cout << "number of MIS colors: " << maxColUsed + 1 << endl;
-                cout << "for instance color " << colorsMISP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
-                break;
-            }
-
             default:{
                 cout << "Selected non-existing algorithm";
                 break;
@@ -183,7 +138,11 @@ int main(int argc, char ** argv) {
 
         chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
         cout << "Time taken: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
+        cout << endl;
     }while(menuMode == true);
 
     return 0;
 }
+
+
+

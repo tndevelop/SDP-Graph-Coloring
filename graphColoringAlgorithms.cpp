@@ -10,35 +10,6 @@ using namespace std;
 mutex lpmutex, mismut;
 
 
-//Starting with a sequential implementation of Jones-Plassman algorithm to check functionality and show a baseline
-vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed) {
-
-    //Assign a random number to each vertex
-    map<int, int> graphNumberMap = {};
-    map<int,list<int>> nodeWeights={};
-
-    for (auto const& node : graph) {
-        int randNumber=rand()%(graph.size()/5);
-        graphNumberMap[node.first] = randNumber;
-        nodeWeights[randNumber].emplace_back(node.first);
-    }
-
-    map<int, list<int>> uncoloredNodes = graph;
-
-    while (uncoloredNodes.size() > 0) {
-
-        //Create independent set of vertices with the highest weights of all neighbours
-        map<int, list<int>> independentSet{};
-       // findIndependentSets(uncoloredNodes, graphNumberMap,graphNumberMap, independentSet);
-
-        //In each independent set assign the minimum colour not belonging to a neighbour
-        assignColours(uncoloredNodes, colors, graph, independentSet, maxColUsed);
-
-    }
-
-    return colors;
-}
-
 void workerFunction(map<int, list<int>>& uncoloredNodes, vector<int>& colors, map<int, list<int>>& graph, map<int, int>& graphNumberMap, int* maxColUsed, map<int, list<int>> nodesToColour) { //vector<map<int, list<int>>> &nodesToColourVect, int i ) { //
     //Create independent set of vertices with the highest weights of all neighbours
     map<int, list<int>> independentSet{};

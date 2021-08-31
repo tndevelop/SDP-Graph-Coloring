@@ -17,7 +17,7 @@ vector<int> initializeLabels( int size) {
 map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap){
 
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
-    cout << "start reading" << endl;
+    cout << "Initializing reading process" << endl;
     string line;
     int nodeNumber=-1;
     list<int> linkedNodes;
@@ -105,3 +105,54 @@ map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<in
 
     return graph;
 }
+
+void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string &selectedGraph, string &finalPath, int argc, char ** argv, vector<string> algorithms, vector<string> graphPaths, string basePath) {
+    selectedGraph = graphPaths[atoi(argv[1])];
+    finalPath = basePath + selectedGraph;
+    if(argc >= 3){
+
+        selectedAlg = atoi(argv[2]) <= algorithms.capacity() ? algorithms[atoi(argv[2])] : "NONE";
+        cout << endl << "-------------------------------------------------------------------------" << endl;
+        cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
+        if(argc >= 4){
+            nThreads = atoi(argv[3]);
+        }
+    }else{
+        menuMode = true;
+
+        cout << "Welcome to the graph coloring program." << endl;
+        cout << "You have selected menu mode, you will be asked to choose an algorithm shortly." << endl;
+        cout << "Graph " << selectedGraph << " will be analyzed. " << endl ;
+    }
+}
+
+bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> algorithms, int nThreads, string selectedGraph, int argc,
+                 char **argv, map<int, list<int>> graph) {
+    colors = initializeLabels(graph.size());
+    int i=0;
+    if(menuMode){
+        cout << "Please select an algorithm: " << endl;
+        for(const string &algorithm : algorithms) {
+            cout << i << ": " << algorithms[i];
+            (i%2 == 1 || i==algorithms.size()-1) ? cout << endl : cout << "\t\t";
+            i++;
+        }
+        cout << "Insert any other number to exit" << endl;
+        cin >> alg;
+        //if(alg >= algorithms->size())
+        if(alg >= algorithms.capacity())
+            return false;
+
+        if(!(alg == 0 || alg == 1 || alg == 3)) {
+            cout << endl << "Select number of threads:" << endl;
+            cin >> nThreads;
+            nThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
+        }
+        cout << "Running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
+    }else{
+        alg = atoi(argv[2]);
+    }
+    return true;
+
+}
+

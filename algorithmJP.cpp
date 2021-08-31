@@ -13,8 +13,63 @@ mutex jpmutex;
 condition_variable cvJPColor;
 int semJPColor;
 
+//Starting with a sequential implementation of Jones-Plassman algorithm to check functionality and show a baseline
+vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int> colors, int* maxColUsed) {
+
+    int coloredNodes = 0;
+
+    while (coloredNodes < colors.size()) {
+
+        for (auto const& node : graph) {
+            if (colors[node.first] == -1) {
+
+                //Find out if I'm the max weighted node amongst uncoloured neighbours
+                bool maxNode = true;
+                vector<int> neighbourColors = {};
+
+                for (auto const& neighbour : node.second) {
+                    if (colors[neighbour] == -1) {
+                        if (graphNumberMap[node.first] < graphNumberMap[neighbour]) {
+                            maxNode = false;
+                            break;
+                        }
+                        else if (graphNumberMap[node.first] == graphNumberMap[neighbour]) {
+                            if (node.first < neighbour) {
+                                maxNode = false;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        neighbourColors.push_back(colors[neighbour]);
+                    }
+                }
+
+                if (maxNode) {
+                    // Colour node
+                    int colour = 0;
+                    while (find(neighbourColors.begin(), neighbourColors.end(), colour) != neighbourColors.end()) {
+                        /* neighborColors contains selectedCol */
+                        colour++;
+                    }
+                    if (colour > *maxColUsed) {
+                        *maxColUsed = colour;
+                    }
+                    colors[node.first] = colour;
+                    coloredNodes++;
+                }
+
+            }
+
+        }
+
+    }
+
+    return colors;
+}
+
 //Parallel implementation of Jones-Plassman algorithm
-void jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int>& colors, int* maxColUsed, int nThreads) {
+vector<int> jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int> colors, int* maxColUsed, int nThreads) {
 
     //map<int, list<int>> uncoloredNodes = graph;
     int coloredNodes = 0;
@@ -37,6 +92,8 @@ void jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>&
     for (auto& worker : workers) {
         worker.join();
     }
+
+    return colors;
 
 }
 
