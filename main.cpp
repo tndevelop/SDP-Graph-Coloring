@@ -3,12 +3,12 @@
 #include "algorithmMIS.h"
 #include "algorithmGreedy.h"
 #include "algorithmJP.h"
+#include "algorithmSDL.h"
 
 #include <iostream>
 #include <string>
 #include <map>
 #include <vector>
-#include <ctime>
 #include <chrono>
 #include <array>
 
@@ -52,6 +52,7 @@ int main(int argc, char ** argv) {
     map<int, list<int>> randToNodesAssignedMap, graph;
 
 
+
     parametersSetup(selectedAlg, nThreads, menuMode, selectedGraph, finalPath, argc, argv, algorithms, graphPaths, basePath);
 
 
@@ -78,7 +79,7 @@ int main(int argc, char ** argv) {
                 break;
             }
             case 1:{
-                vector<int> colorsJPS = jonesPlassmannSequentialAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsJPS = jonesPlassmannSequentialAssignment(graph, graphNumberMap, colors, &maxColUsed);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
@@ -88,13 +89,12 @@ int main(int argc, char ** argv) {
                 break;
             }
             case 2:{
-                //vector<int> colorsJP = 
-                jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
+                vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of JP colors: " << maxColUsed + 1 << endl;
-                cout << "for instance color " << colors[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+                cout << "for instance color " << colorsJP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
 
                 break;
             }
@@ -110,7 +110,7 @@ int main(int argc, char ** argv) {
 
             }
             case 4:{
-                vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed, nThreads);
+                vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;

@@ -137,10 +137,11 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
         }
         cout << "any other number to exit" << endl;
         cin >> alg;
+        //if(alg >= algorithms->size())
         if(alg >= sizeof(algorithms))
             return false;
 
-        if(alg != 0) {
+        if(!(alg == 0 || alg == 1 || alg == 3)) {
             cout << endl << "select number of threads:" << endl;
             cin >> nThreads;
         }
