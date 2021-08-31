@@ -144,6 +144,7 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
         if(!(alg == 0 || alg == 1 || alg == 3)) {
             cout << endl << "select number of threads:" << endl;
             cin >> nThreads;
+            nThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
         }
         cout << "running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
     }else{
