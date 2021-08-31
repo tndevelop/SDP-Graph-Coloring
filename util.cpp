@@ -111,7 +111,7 @@ void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string 
     finalPath = basePath + selectedGraph;
     if(argc >= 3){
 
-        selectedAlg = atoi(argv[2]) <= (sizeof(algorithms) / sizeof(algorithms[0])) ? algorithms[atoi(argv[2])] : "NONE";
+        selectedAlg = atoi(argv[2]) <= algorithms.capacity() ? algorithms[atoi(argv[2])] : "NONE";
         cout << endl << "-------------------------------------------------------------------------" << endl;
         cout << "running " << selectedAlg << " algorithm on graph " << selectedGraph << endl << endl ;
         if(argc >= 4){
@@ -138,7 +138,7 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
         cout << "any other number to exit" << endl;
         cin >> alg;
         //if(alg >= algorithms->size())
-        if(alg >= sizeof(algorithms))
+        if(alg >= algorithms.capacity())
             return false;
 
         if(!(alg == 0 || alg == 1 || alg == 3)) {
