@@ -17,7 +17,7 @@ vector<int> initializeLabels( int size) {
 map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap){
 
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
-    cout << "start reading" << endl;
+    cout << "Initializing reading process" << endl;
     string line;
     int nodeNumber=-1;
     list<int> linkedNodes;
@@ -120,8 +120,9 @@ void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string 
     }else{
         menuMode = true;
 
-        cout << "menu mode selected, you'll be asked to choose an algorithm shortly" << endl;
-        cout << "graph " << selectedGraph << " was selected " << endl ;
+        cout << "Welcome to the graph coloring program." << endl;
+        cout << "You have selected menu mode, you will be asked to choose an algorithm shortly." << endl;
+        cout << "Graph " << selectedGraph << " will be analyzed. " << endl ;
     }
 }
 
@@ -130,23 +131,24 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
     colors = initializeLabels(graph.size());
     int i=0;
     if(menuMode){
+        cout << "Please select an algorithm: " << endl;
         for(const string &algorithm : algorithms) {
             cout << i << ": " << algorithms[i];
-            i%2 == 1 ? cout << endl : cout << "\t\t";
+            (i%2 == 1 || i==algorithms.size()-1) ? cout << endl : cout << "\t\t";
             i++;
         }
-        cout << "any other number to exit" << endl;
+        cout << "Insert any other number to exit" << endl;
         cin >> alg;
         //if(alg >= algorithms->size())
         if(alg >= algorithms.capacity())
             return false;
 
         if(!(alg == 0 || alg == 1 || alg == 3)) {
-            cout << endl << "select number of threads:" << endl;
+            cout << endl << "Select number of threads:" << endl;
             cin >> nThreads;
             nThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
         }
-        cout << "running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
+        cout << "Running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
     }else{
         alg = atoi(argv[2]);
     }
