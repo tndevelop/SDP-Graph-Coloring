@@ -1,4 +1,4 @@
-#include "graphColoringAlgorithms.h"
+#include "algorithmGreedy.h"
 
 using namespace std;
 

@@ -1,5 +1,4 @@
 #include "util.h"
-#include "graphColoringAlgorithms.h"
 #include "algorithmMIS.h"
 #include "algorithmGreedy.h"
 #include "algorithmJP.h"
