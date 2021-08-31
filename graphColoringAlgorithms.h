@@ -8,10 +8,6 @@
 
 using namespace std;
 
-
-
-vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
-
 void assignNumberWorker(map<int, list<int>>& graph, map<int, int>& graphNumberMap);
 
 void assignRandomNumbers(map<int, list<int>>& graph, map<int, int>& graphNumberMap, int nThreads);
