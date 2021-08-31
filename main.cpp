@@ -77,7 +77,7 @@ int main(int argc, char ** argv) {
             }
             cout << "any other number to exit" << endl;
             cin >> alg;
-            if(alg >= sizeof(algorithms))
+            if(alg >= algorithms->size())
                 break;
 
             if(alg != 0) {
