@@ -14,6 +14,6 @@ void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, 
 
 vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
 vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> map, vector<int> vector, int* maxColUsed);
-void parallelWeighting(pair<int, list<int>> node,map<int, int> &graphNumberMap, int i, map<int,list<int>> &unweightedGraph, map<int,list<int>> &nodeWeights, map<int, int> &graphNumberRandMap,  map<int,list<int>> &graph, map<int,list<int>> &tempGraph);
+void parallelWeighting(int threadN, map<int,list<int>> &unweightedGraph, map<int,list<int>> &nodeWeights,int maxThreads,vector<int> toBeRemoved);
 
 #endif //REPO_ALGORITHMSDL_H

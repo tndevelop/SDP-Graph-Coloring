@@ -10,32 +10,35 @@
 
 using namespace std;
 
-mutex sdlmutex;
-int semSDLColor, semSDLNodes;
+mutex sdlmutex, weightMutex,sdlmutex2,mutex3;
+unique_lock<mutex> lockko(weightMutex), lockko2(mutex3);
+condition_variable semSDL, semSDL2;
+int val=1, cons=0;
 
+int sdlSemaphore, sdlSemaphore2;
 
-vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
-    int i=1;
-    int k=0;
-    map<int,list<int>> unweightedGraph(graph);
-    map<int,list<int>> nodeWeights={};
+vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int *maxColUsed) {
+    int i = 1;
+    int k = 0;
+    map<int, list<int>> unweightedGraph(graph);
+    map<int, list<int>> nodeWeights = {};
     map<int, int> graphNumberRandMap = {};
-    vector<int> toBeRemoved={};
+    vector<int> toBeRemoved = {};
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
-    while(!unweightedGraph.empty()){
-        for(auto const& node : unweightedGraph ){
-            if(node.second.size()<=k){
+    while (!unweightedGraph.empty()) {
+        for (auto const &node : unweightedGraph) {
+            if (node.second.size() <= k) {
                 nodeWeights[i].emplace_back(node.first);
-                graphNumberRandMap[node.first]=rand()%(graph.size()*2);
-                for(const auto neighbour : node.second){
+                graphNumberRandMap[node.first] = rand() % (graph.size() * 2);
+                for (const auto neighbour : node.second) {
                     unweightedGraph[neighbour].remove(node.first);
                 }
                 toBeRemoved.emplace_back(node.first);
             }
         }
-        if(toBeRemoved.size()>0){
+        if (toBeRemoved.size() > 0) {
             i++;
-            for(auto node : toBeRemoved){
+            for (auto node : toBeRemoved) {
                 unweightedGraph.erase(node);
             }
             toBeRemoved.clear();
@@ -44,7 +47,8 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
         k++;
     }
     chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
-    cout << "Time taken for weighting: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
+    cout << "Time taken for weighting: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count()
+         << " milliseconds" << endl;
 
     map<int, list<int>> uncoloredNodes = graph;
 
@@ -55,7 +59,7 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
         //       findIndependentSets(uncoloredNodes, graphNumberMap, graphNumberRandMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
-        assignColoursSDL(uncoloredNodes, colors,  nodeWeights, maxColUsed);
+        assignColoursSDL(uncoloredNodes, colors, nodeWeights, maxColUsed);
 
     }
 
@@ -63,27 +67,28 @@ vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, ve
 
 
 }
-void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &nodeWeights, int* maxColUsed) {
+
+void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, map<int, list<int>> &nodeWeights,
+                      int *maxColUsed) {
     //In each independent set assign the minimum colour not belonging to a neighbour
-    map<int,list<int>> neighborColors = {};
-    for (int i=nodeWeights.size();i>0;i--) {
-        for(const auto node: nodeWeights[i]){
+    map<int, list<int>> neighborColors = {};
+    for (int i = nodeWeights.size(); i > 0; i--) {
+        for (const auto node: nodeWeights[i]) {
             neighborColors[node].sort();
 
             //Build set of neighbours colours
 
             //assign lowest color not in use by any neighbor
             int selectedCol = 0;
-            int previous=0;
-            for(auto neighborCol : neighborColors[node])
-            {
-                if(neighborCol-previous>1){
-                    selectedCol=previous+1;
+            int previous = 0;
+            for (auto neighborCol : neighborColors[node]) {
+                if (neighborCol - previous > 1) {
+                    selectedCol = previous + 1;
                     break;
-                }else{
+                } else {
                     selectedCol++;
                 }
-                previous=neighborCol;
+                previous = neighborCol;
             }
             colors[node] = selectedCol;
             if (selectedCol > *maxColUsed)
@@ -93,7 +98,7 @@ void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, 
             //Remove coloured nodes from uncolouredNodes, and from neighbours in uncolouredNodes
             //Encased in a mutex to ensure atomicity
             sdlmutex.lock();
-            for (auto& neighbor : uncoloredNodes[node]) {
+            for (auto &neighbor : uncoloredNodes[node]) {
                 uncoloredNodes[neighbor].remove(node);
                 neighborColors[neighbor].emplace_back(selectedCol);
             }
@@ -104,44 +109,32 @@ void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors, 
     }
 
 }
-vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int* maxColUsed){
+
+vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int *maxColUsed) {
     vector<thread> workers;
     int maxThreads = thread::hardware_concurrency();
-    cout << "Max threads supported: " << maxThreads << endl;
-    semSDLColor = maxThreads;
-    semSDLNodes = maxThreads;
-
-
-
-    int i=1;
-    int k=0;
-    map<int,list<int>> unweightedGraph(graph);
-    map<int,list<int>> tempGraph(graph);
-    map<int,list<int>> nodeWeights={};
-    map<int, int> graphNumberMap = {};
-    map<int, int> graphNumberRandMap = {};
+    sdlSemaphore = 0;
+    sdlSemaphore2 = maxThreads;
+    vector<int> toBeRemoved = {};
+    map<int, list<int>> unweightedGraph(graph);
+    map<int, list<int>> nodeWeights = {};
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
+    for (int j = 0; j < maxThreads; j++) {
 
-    while(!unweightedGraph.empty()){
-        sdlmutex.lock();
-        for(int i=0;i<maxThreads;i++){
+        workers.emplace_back([j, &unweightedGraph, &nodeWeights, maxThreads, &toBeRemoved] {
+            parallelWeighting(j, unweightedGraph, nodeWeights, maxThreads, toBeRemoved);
+        });
 
-             //   workers.emplace_back([node,&graphNumberMap,i,&unweightedGraph,&nodeWeights,&graphNumberRandMap,&graph,&tempGraph] {parallelWeighting(node,graphNumberMap,i,unweightedGraph,nodeWeights,graphNumberRandMap,graph,tempGraph);});
-
-        }
-        sdlmutex.unlock();
-        for(auto& thread : workers){
-            thread.join();
-        }
-        if(unweightedGraph.size()>tempGraph.size()){
-            i++;
-            unweightedGraph.operator=(tempGraph);
-        }
-
-        k++;
     }
+    for (auto &thread : workers) {
+        thread.join();
+    }
+    workers.clear();
+
+
     chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
-    cout << "Time taken for weighting: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
+    cout << "Time taken for weighting: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count()
+         << " milliseconds" << endl;
 
     map<int, list<int>> uncoloredNodes = graph;
     while (uncoloredNodes.size() > 0) {
@@ -151,23 +144,54 @@ vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vect
         //       findIndependentSets(uncoloredNodes, graphNumberMap, graphNumberRandMap, independentSet);
 
         //In each independent set assign the minimum colour not belonging to a neighbour
-        assignColoursSDL(uncoloredNodes, colors,  nodeWeights, maxColUsed);
+        assignColoursSDL(uncoloredNodes, colors, nodeWeights, maxColUsed);
     }
 
     return colors;
 }
 
 
-void parallelWeighting(pair<int, list<int>> node,map<int, int> &graphNumberMap, int i, map<int,list<int>> &unweightedGraph, map<int,list<int>> &nodeWeights, map<int, int> &graphNumberRandMap,  map<int,list<int>> &graph, map<int,list<int>> &tempGraph){
-  int k=0;
-    if(node.second.size()<=k){
-    graphNumberMap[node.first]=i;
-    nodeWeights[i].emplace_back(node.first);
-    graphNumberRandMap[node.first]=rand()%(graph.size()*2);
-
-        for(const auto neighbour : node.second){
-            tempGraph[neighbour].remove(node.first);
+void
+parallelWeighting(int threadN, map<int, list<int>> &unweightedGraph, map<int, list<int>> &nodeWeights, int maxThreads,
+                  vector<int> toBeRemoved) {
+    while (!unweightedGraph.empty()) {
+        for (int j = threadN * (unweightedGraph.size() / maxThreads);
+             j < ((unweightedGraph.size() / maxThreads) * threadN + 1); j++) {
+            sdlSemaphore++;
+            if (unweightedGraph[j].size() <= cons) {
+                nodeWeights[val].emplace_back(j);
+                sdlSemaphore--;
+                if (sdlSemaphore == 0) {
+                    sdlSemaphore = maxThreads;
+                    semSDL.notify_all();
+                } else {
+                    semSDL.wait(lockko);
+                }
+                for (const auto neighbour : unweightedGraph[j]) {
+                    unweightedGraph[neighbour].remove(j);
+                }
+                toBeRemoved.emplace_back(j);
+            }
+            sdlSemaphore--;
         }
-        tempGraph.erase(node.first);
+        sdlmutex2.lock();
+        if (toBeRemoved.size() > 0) {
+            val++;
+
+            for (auto node : toBeRemoved) {
+                unweightedGraph.erase(node);
+            }
+            toBeRemoved.clear();
+        }
+        sdlmutex2.unlock();
+        sdlSemaphore2--;
+        if (sdlSemaphore2 == 0) {
+            sdlSemaphore2 = maxThreads;
+            cons++;
+            semSDL2.notify_all();
+        } else {
+            semSDL2.wait(lockko2);
+        }
     }
+
 }
