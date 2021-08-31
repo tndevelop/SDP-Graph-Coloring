@@ -4,4 +4,4 @@ project(repo)
 set(CMAKE_CXX_STANDARD 11)
 
 
-add_executable(repo main.cpp util.h util.cpp graphColoringAlgorithms.h graphColoringAlgorithms.cpp algorithmJP.cpp algorithmJP.h algorithmMIS.cpp algorithmMIS.h algorithmGreedy.h algorithmGreedy.cpp algorithmSDL.h algorithmSDL.cpp)
+add_executable(repo main.cpp util.h util.cpp algorithmJP.cpp algorithmJP.h algorithmMIS.cpp algorithmMIS.h algorithmGreedy.h algorithmGreedy.cpp algorithmSDL.h algorithmSDL.cpp)
