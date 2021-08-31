@@ -2,7 +2,6 @@
 #include <thread>
 #include <iostream>
 #include <mutex>
-#include <future>
 #include <vector>
 #include <condition_variable>
 #include <chrono>
