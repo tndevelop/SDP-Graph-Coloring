@@ -31,5 +31,7 @@ map<int, int> assignDegree(map<int, list<int>> &map, int threads);
 
 void findDegreeThread(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, int threadId, int maxThreads, int stepSize, int size);
 
+void createBatchFile();
+
 
 #endif //REPO_UTIL_H

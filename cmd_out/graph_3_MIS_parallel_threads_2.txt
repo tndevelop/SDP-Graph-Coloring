@@ -1,0 +1,5 @@
+
+-------------------------------------------------------------------------
+running MIS parallel algorithm on graph small_sparse_real/agrocyc_dag_uniq.gra
+
+Initializing reading process

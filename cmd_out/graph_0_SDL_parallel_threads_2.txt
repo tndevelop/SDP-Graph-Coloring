@@ -1,0 +1,7 @@
+
+-------------------------------------------------------------------------
+running SDL parallel algorithm on graph manual/v10.gra
+
+Initializing reading process
+Time taken by Read: 2 milliseconds
+Starting now

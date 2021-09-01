@@ -1,0 +1,8 @@
+
+-------------------------------------------------------------------------
+running JP parallel algorithm on graph manual/v100.gra
+
+Initializing reading process
+Time taken by Read: 38 milliseconds
+Starting now
+Max threads supported: 4

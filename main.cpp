@@ -42,6 +42,8 @@ int main(int argc, char ** argv) {
             /*7)*/"large/uniprotenc_150m.scc.gra"/*2MB*/, "large/citeseer.scc.gra"/*8MB*/, "large/uniprotenc_22m.scc.gra"/*19MB*/, "large/go_uniprot.gra"/*255MB*/,
             /*11)*/"large/citeseerx.gra" /*176MB*/, "large/cit-Patents.scc.gra" /*162MB*/, "large/uniprotenc_100m.scc.gra" /*232MB*/};
 
+    //createBatchFile();// uncomment when required to create the batch file
+
     bool menuMode = false;
     vector<int> colors;
     map<int, int> graphNumberMap, nodesDegree;

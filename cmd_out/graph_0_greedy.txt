@@ -1,0 +1,13 @@
+
+-------------------------------------------------------------------------
+running greedy algorithm on graph manual/v10.gra
+
+Initializing reading process
+Time taken by Read: 2 milliseconds
+Starting now
+number of nodes: 10
+number of greedy colors: 6
+for instance color 2 was assigned to node 5
+Time taken: 0 milliseconds
+
+Peak memory used: 7.52344 MB

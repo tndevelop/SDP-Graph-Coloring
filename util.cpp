@@ -1,5 +1,7 @@
 #include "util.h"
 #include <list>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -161,3 +163,44 @@ void findDegreeThread(map<int, list<int>>& graph, map<int, int>& nodesDegree, in
     return;
 }
 
+// Function to create a script file for running multiple graph/algorithm combinations
+void createBatchFile() {
+
+    vector<int> graphs = { 0, 1, 3, 5, 7, 8, 9, 10, 13};
+    vector<int> threads = { 2, 4, 8 };
+
+    ofstream file;
+    file.open("runScript.cmd");
+
+    for (int i = 0; i < graphs.size(); i++) {
+        // Greedy
+        file << "GraphColouring.exe " << graphs[i] << " " << 0 << " > cmd_out/graph_" << graphs[i] << "_greedy.txt" << endl;
+
+        //JP
+        file << "GraphColouring.exe " << graphs[i] << " " << 1 << " > cmd_out/graph_" << graphs[i] << "_JP_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 2 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_JP_parallel_threads_" << threads[k] << ".txt" << endl;
+        }
+
+        /*//SDL
+        file << "GraphColouring.exe " << graphs[i] << " " << 3 << " > cmd_out/graph_" << graphs[i] << "_SDL_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 4 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_SDL_parallel_threads_" << threads[k] << ".txt" << endl;
+        }*/
+
+        //MIS
+        file << "GraphColouring.exe " << graphs[i] << " " << 5 << " > cmd_out/graph_" << graphs[i] << "_MIS_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 6 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_MIS_parallel_threads_" << threads[k] << ".txt" << endl;
+        }
+
+        //LDF
+        file << "GraphColouring.exe " << graphs[i] << " " << "7 1" << " > cmd_out/graph_" << graphs[i] << "_LDF_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 7 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_LDF_parallel_threads_" << threads[k] << ".txt" << endl;
+        }
+        
+    }
+
+    file.close();
+}
