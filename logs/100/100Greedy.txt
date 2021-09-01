@@ -1,0 +1,35 @@
+[runlim] version:		1.10
+[runlim] time limit:		311040000 seconds
+[runlim] real time limit:	311040000 seconds
+[runlim] space limit:		13990 MB
+[runlim] argv[0]:		./a.out
+[runlim] argv[1]:		13
+[runlim] argv[2]:		0
+[runlim] start:			Wed Sep  1 02:19:42 2021
+[runlim] main pid:		16958
+[runlim] sample:		10.0 time, 10.2 real, 342.8 MB
+[runlim] sample:		20.0 time, 20.2 real, 659.9 MB
+[runlim] sample:		30.0 time, 30.2 real, 970.8 MB
+[runlim] sample:		40.0 time, 40.2 real, 1279.4 MB
+[runlim] sample:		50.0 time, 50.2 real, 1580.3 MB
+[runlim] sample:		60.0 time, 60.2 real, 1890.5 MB
+[runlim] sample:		70.0 time, 70.2 real, 2198.3 MB
+[runlim] sample:		79.9 time, 80.2 real, 2562.8 MB
+[runlim] sample:		89.9 time, 90.2 real, 2870.4 MB
+[runlim] sample:		99.9 time, 100.2 real, 3154.3 MB
+[runlim] sample:		109.9 time, 110.2 real, 3422.6 MB
+[runlim] sample:		119.9 time, 120.2 real, 3678.4 MB
+[runlim] sample:		129.9 time, 130.2 real, 3925.1 MB
+[runlim] sample:		139.9 time, 140.2 real, 4163.1 MB
+[runlim] sample:		149.9 time, 150.2 real, 4394.1 MB
+[runlim] sample:		159.9 time, 160.2 real, 6676.2 MB
+[runlim] sample:		169.9 time, 170.2 real, 6737.6 MB
+[runlim] sample:		179.9 time, 180.2 real, 6737.6 MB
+[runlim] end:			Wed Sep  1 02:22:46 2021
+[runlim] status:		ok
+[runlim] result:		0
+[runlim] children:		0
+[runlim] real:			184.93 seconds
+[runlim] time:			184.56 seconds
+[runlim] space:			6737.6 MB
+[runlim] samples:		1847

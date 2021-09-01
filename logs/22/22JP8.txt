@@ -1,0 +1,19 @@
+[runlim] version:		1.10
+[runlim] time limit:		311040000 seconds
+[runlim] real time limit:	311040000 seconds
+[runlim] space limit:		13990 MB
+[runlim] argv[0]:		./a.out
+[runlim] argv[1]:		9
+[runlim] argv[2]:		2
+[runlim] argv[3]:		8
+[runlim] start:			Wed Sep  1 00:36:47 2021
+[runlim] main pid:		3866
+[runlim] sample:		10.0 time, 10.6 real, 356.4 MB
+[runlim] end:			Wed Sep  1 00:37:05 2021
+[runlim] status:		ok
+[runlim] result:		0
+[runlim] children:		0
+[runlim] real:			18.82 seconds
+[runlim] time:			28.42 seconds
+[runlim] space:			672.1 MB
+[runlim] samples:		182

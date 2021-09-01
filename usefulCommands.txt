@@ -2,7 +2,30 @@ COMANDI di test
 
     1) run all the algorithms on all the large files with runlim
 
-runlim -o ./logs/150/150Greedy.txt ./a.out 7 0 ; runlim -o ./logs/150/150JP.txt ./a.out 7 2 ; runlim -o ./logs/150/150SDL.txt ./a.out 7 4 ; runlim -o ./logs/150/150MIS.txt ./a.out 7 6 ; runlim -o ./logs/150/150MISIter.txt ./a.out 7 7 ; 
+runlim -o ./logs/150/150Greedy.txt ./a.out 7 0 ; 
+runlim -o ./logs/150/150JP1.txt ./a.out 7 2 1 ; runlim -o ./logs/150/150JP2.txt ./a.out 7 2 2 ; runlim -o ./logs/150/150JP4.txt ./a.out 7 2 4 ; runlim -o ./logs/150/150JP8.txt ./a.out 7 2 8 ; 
+
+runlim -o ./logs/citeseer/citeseerGreedy.txt ./a.out 8 0 ; 
+runlim -o ./logs/citeseer/citeseerJP1.txt ./a.out 8 2 1 ; runlim -o ./logs/citeseer/citeseerJP2.txt ./a.out 8 2 2 ; runlim -o ./logs/citeseer/citeseerJP4.txt ./a.out 8 2 4 ; runlim -o ./logs/citeseer/citeseerJP8.txt ./a.out 8 2 8 ; 
+
+runlim -o ./logs/22/22Greedy.txt ./a.out 9 0 ; 
+runlim -o ./logs/22/22JP1.txt ./a.out 9 2 1 ; runlim -o ./logs/22/22JP2.txt ./a.out 9 2 2 ; runlim -o ./logs/22/22JP4.txt ./a.out 9 2 4 ; runlim -o ./logs/22/22JP8.txt ./a.out 9 2 8 ; 
+
+runlim -o ./logs/go/goGreedy.txt ./a.out 10 0 ; 
+runlim -o ./logs/go/goJP1.txt ./a.out 10 2 1 ; runlim -o ./logs/go/goJP2.txt ./a.out 10 2 2 ; runlim -o ./logs/go/goJP4.txt ./a.out 10 2 4 ; runlim -o ./logs/go/goJP8.txt ./a.out 10 2 8 ; 
+
+runlim -o ./logs/citeseerx/citeseerxGreedy.txt ./a.out 11 0 ; 
+runlim -o ./logs/citeseerx/citeseerxJP1.txt ./a.out 11 2 1 ; runlim -o ./logs/citeseerx/citeseerxJP2.txt ./a.out 11 2 2 ; runlim -o ./logs/citeseerx/citeseerxJP4.txt ./a.out 11 2 4 ; runlim -o ./logs/citeseerx/citeseerxJP8.txt ./a.out 11 2 8 ; 
+
+runlim -o ./logs/cit/citGreedy.txt ./a.out 12 0 ; 
+runlim -o ./logs/cit/citJP1.txt ./a.out 12 2 1 ; runlim -o ./logs/cit/citJP2.txt ./a.out 12 2 2 ; runlim -o ./logs/cit/citJP4.txt ./a.out 12 2 4 ; runlim -o ./logs/cit/citJP8.txt ./a.out 12 2 8 ; 
+
+runlim -o ./logs/100/100Greedy.txt ./a.out 13 0 ; 
+runlim -o ./logs/100/100JP1.txt ./a.out 13 2 1 ; runlim -o ./logs/100/100JP2.txt ./a.out 13 2 2 ; runlim -o ./logs/100/100JP4.txt ./a.out 13 2 4 ; runlim -o ./logs/100/100JP8.txt ./a.out 13 2 8 
+
+
+runlim -o ./logs/150/150SDL.txt ./a.out 7 4 ; runlim -o ./logs/150/150MIS.txt ./a.out 7 6 ; runlim -o ./logs/150/150MISIter.txt ./a.out 7 7 ; 
+
 runlim -o ./logs/Citeseer/CiteseerGreedy.txt ./a.out 8 0 ; runlim -o ./logs/Citeseer/CiteseerJP.txt ./a.out 8 2 ; runlim -o ./logs/Citeseer/CiteseerSDL.txt ./a.out 8 4 ; runlim -o ./logs/Citeseer/CiteseerMIS.txt ./a.out 8 6 ; runlim -o ./logs/Citeseer/CiteseerMISIter.txt ./a.out 8 7 ; 
 runlim -o ./logs/22/22Greedy.txt ./a.out 9 0 ; runlim -o ./logs/22/22JP.txt ./a.out 9 2 ; runlim -o ./logs/22/22SDL.txt ./a.out 9 4 ; runlim -o ./logs/22/22MIS.txt ./a.out 9 6 ; runlim -o ./logs/22/22MISIter.txt ./a.out 9 7 ; 
 runlim -o ./logs/Go/GoGreedy.txt ./a.out 10 0 ; runlim -o ./logs/Go/GoJP.txt ./a.out 10 2 ; runlim -o ./logs/Go/GoSDL.txt ./a.out 10 4 ; runlim -o ./logs/Go/GoMIS.txt ./a.out 10 6 ; runlim -o ./logs/Go/GoMISIter.txt ./a.out 10 7 
@@ -23,4 +46,4 @@ es
 ./a.out 7
 
     4) run without executing algorithms
-runlim -o ./logs/150IO.txt ./a.out 7 9 ; runlim -o ./logs/CiteseerIO.txt ./a.out 8 9 ; runlim -o ./logs/22IO.txt ./a.out 9 9 ; runlim -o ./logs/GoIO.txt ./a.out 10 9 ; runlim -o ./logs/CiteseerxIO.txt ./a.out 11 9 ; runlim -o ./logs/Cit-PatensIO.txt ./a.out 12 9
+runlim -o ./logs/150IO.txt ./a.out 7 9 ; runlim -o ./logs/CiteseerIO.txt ./a.out 8 9 ; runlim -o ./logs/22IO.txt ./a.out 9 9 ; runlim -o ./logs/GoIO.txt ./a.out 10 9 ; runlim -o ./logs/citIO.txt ./a.out 12 9 ; runlim -o ./logs/Cit-PatensIO.txt ./a.out 12 9
