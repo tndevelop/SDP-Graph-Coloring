@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include <list>
+
 using namespace std;
 
 void assignColoursSDL(map<int, list<int>> &uncoloredNodes, vector<int> &colors,  map<int, list<int>> &nodeWeights, int* maxColUsed);

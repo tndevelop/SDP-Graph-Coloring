@@ -18,7 +18,7 @@ Four graph coloring algorithms were considered during the implementation phase o
 1) A sequencial greedy algorithm 
 2) The Jones-Plassman parallel algorithm 
 3) The Smallest-Degree-Last parallel algorithm 
-4) 
+4) The Largest-degree-first parallel algorithm
 
 The aim of this project was to prove that the parallel algorithms can outperform sequential algorithms in terms of the time taken to analyze large graphs. To this end a variety of different of graphs with different sizes have been analysed, along with the effect of differing the number of available threads for the parallel algorithms.
 
@@ -38,7 +38,7 @@ Initially the algorithms were written together in one .cpp file, with the intent
 
 ## Graph Reading
 
-%TODO - Tomasso
+%TODO - Tommaso
 
 ## Parallelisation
 

@@ -7,13 +7,13 @@
 #include <mutex>
 #include <future>
 #include <vector>
-
+#include <pthread.h>
 using namespace std;
 
-mutex sdlmutex, weightMutex,sdlmutex2,mutex3;
+mutex sdlmutex, weightMutex, sdlmutex2, mutex3;
 unique_lock<mutex> lockko(weightMutex), lockko2(mutex3);
 condition_variable semSDL, semSDL2;
-int val=1, cons=0;
+int val = 1, cons = 0, readers = 0, writers = 0;
 
 int sdlSemaphore, sdlSemaphore2;
 
@@ -114,7 +114,7 @@ vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vect
     vector<thread> workers;
     int maxThreads = thread::hardware_concurrency();
     sdlSemaphore = 0;
-    sdlSemaphore2 = maxThreads;
+    sdlSemaphore2 = 0;
     vector<int> toBeRemoved = {};
     map<int, list<int>> unweightedGraph(graph);
     map<int, list<int>> nodeWeights = {};
@@ -154,46 +154,62 @@ vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vect
 void
 parallelWeighting(int threadN, map<int, list<int>> &unweightedGraph, map<int, list<int>> &nodeWeights, int maxThreads,
                   vector<int> toBeRemoved) {
-    while (!unweightedGraph.empty()) {
-        for (int j = threadN * (unweightedGraph.size() / maxThreads);
-             j < ((unweightedGraph.size() / maxThreads) * threadN + 1); j++) {
-            sdlmutex2.lock();
-            if (unweightedGraph[j].size() <= cons) {
-                sdlmutex2.unlock();
-                nodeWeights[val].emplace_back(j);
+    map<int, list<int>>::iterator iter;
+    int numThreads = maxThreads;
+
+
+    do{
+        int i = threadN;
+        iter = unweightedGraph.begin();
+        advance(iter, threadN);
+        do {
+            while (!writers == 0);
+            sdlmutex.lock();
+            readers++;
+            sdlmutex.unlock();
+            if (iter->second.size() <= cons) {
+                nodeWeights[cons].emplace_back(iter->first);
+                toBeRemoved.emplace_back(iter->first);
+                readers--;
                 sdlmutex.lock();
-                for (const auto neighbour : unweightedGraph[j]) {
-                    unweightedGraph[neighbour].remove(j);
-                }
+                writers++;
                 sdlmutex.unlock();
-                toBeRemoved.emplace_back(j);
-            }else sdlmutex2.unlock();
-
-        }
-
-        sdlSemaphore--;
-        if (sdlSemaphore == 0) {
-            if (toBeRemoved.size() > 0) {
-                val++;
-                for (auto node : toBeRemoved) {
-                    unweightedGraph.erase(node);
+                while(!readers==0);
+                for (auto neighbor:iter->second) {
+                    unweightedGraph[neighbor].remove(iter->first);
                 }
-                toBeRemoved.clear();
-            }
-            sdlSemaphore = maxThreads;
-            semSDL.notify_all();
-        } else {
-            semSDL.wait(lockko);
-        }
+                writers--;
+                sdlmutex.unlock();
+                sdlmutex2.lock();
+                if (toBeRemoved.size() > 0) {
+                    val++;
+                    for (auto node : toBeRemoved) {
+                        unweightedGraph.erase(node);
+                    }
+                    toBeRemoved.clear();
+                    sdlmutex2.unlock();
+                } else sdlmutex2.unlock();
 
-        sdlSemaphore2--;
-        if (sdlSemaphore2 == 0) {
-            sdlSemaphore2 = maxThreads;
-            cons++;
-            semSDL2.notify_all();
-        } else {
-            semSDL2.wait(lockko2);
-        }
-    }
+            }else readers--;
+
+            i += numThreads;
+            if (i >= unweightedGraph.size()) {
+                if(sdlSemaphore==maxThreads-1){
+                    cons++;
+                    sdlSemaphore=0;
+                    semSDL.notify_all();
+                }
+                else{
+                    sdlSemaphore++;
+                    semSDL.wait(lockko);
+                }
+                break;
+            }
+            advance(iter, numThreads);
+        } while (i < unweightedGraph.size());
+
+    }while (!unweightedGraph.empty()) ;
+
+
 
 }
