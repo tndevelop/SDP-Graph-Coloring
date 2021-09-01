@@ -124,7 +124,7 @@ int main(int argc, char ** argv) {
             }
 
             case 6: {
-                vector<int> colorsMISP = misParallelAssignment(graph, colors, &maxColUsed, nThreads);
+                vector<int> colorsMISP = misParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;

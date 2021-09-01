@@ -70,7 +70,6 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>>& graph, map<i
 //Parallel implementation of Jones-Plassman algorithm
 vector<int> jonesPlassmannParallelAssignment(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int> colors, int* maxColUsed, int nThreads) {
 
-    //map<int, list<int>> uncoloredNodes = graph;
     int coloredNodes = 0;
 
     //Get maximum number of threads for the system
