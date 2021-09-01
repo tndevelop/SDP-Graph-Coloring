@@ -3,6 +3,7 @@
 #include "algorithmGreedy.h"
 #include "algorithmJP.h"
 #include "algorithmSDL.h"
+#include "algorithmLDF.h"
 
 #include <iostream>
 #include <string>
@@ -32,7 +33,7 @@ using namespace std;
 int main(int argc, char ** argv) {
     int alg, nThreads = -1, maxColUsed = -1;
     string selectedAlg, selectedGraph, finalPath, basePath = "./graphs/benchmark/";
-    vector<string> algorithms  = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel"};
+    vector<string> algorithms  = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel", "LDF parallel"};
     vector<string> graphPaths = {/*0)*/"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/,
             /*3)*/"small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
             // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
@@ -126,6 +127,16 @@ int main(int argc, char ** argv) {
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of MIS colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsMISP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+                break;
+            }
+
+            case 7: {
+                vector<int> colorsLDF = ldfParallelAssignment(graph, colors, &maxColUsed, nThreads);
+
+                //some output just to be sure the application ran properly
+                cout << "number of nodes: " << graph.size() << endl;
+                cout << "number of LDF colors: " << maxColUsed + 1 << endl;
+                cout << "for instance color " << colorsLDF[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
                 break;
             }
 
