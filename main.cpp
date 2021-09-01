@@ -28,6 +28,7 @@ using namespace std;
  *          4 = SDL parallel
  *          5 = MIS sequential
  *          6 = MIS parallel
+ *          7 = LDF parallel
  * )
  */
 
@@ -77,7 +78,7 @@ int main(int argc, char ** argv) {
             case 1:{
                 vector<int> colorsJPS = jonesPlassmannSequentialAssignment(graph, graphNumberMap, colors, &maxColUsed);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of JP colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsJPS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -87,7 +88,7 @@ int main(int argc, char ** argv) {
             case 2:{
                 vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of JP colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsJP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -97,8 +98,7 @@ int main(int argc, char ** argv) {
             case 3:{
                 vector<int> colorsSDLS = smallestDegreeLastSequentialAssignment(graph, colors, &maxColUsed);
 
-
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of SDLS colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsSDLS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -108,7 +108,7 @@ int main(int argc, char ** argv) {
             case 4:{
                 vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of SDLP colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsSDLP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -118,7 +118,7 @@ int main(int argc, char ** argv) {
             case 5: {
                 vector<int> colorsMIS = misSequentialAssignment(graph, colors, &maxColUsed);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of MIS colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsMIS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -128,7 +128,7 @@ int main(int argc, char ** argv) {
             case 6: {
                 vector<int> colorsMISP = misParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of MIS colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsMISP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -138,7 +138,7 @@ int main(int argc, char ** argv) {
             case 7: {
                 vector<int> colorsLDF = ldfParallelAssignment(graph, colors, nodesDegree, &maxColUsed, nThreads);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of LDF colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsLDF[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
