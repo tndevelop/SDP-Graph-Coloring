@@ -42,12 +42,12 @@ int main(int argc, char ** argv) {
 
     bool menuMode = false;
     vector<int> colors;
-    map<int, int> graphNumberMap;
+    map<int, int> graphNumberMap, nodesDegree;
     map<int, list<int>> randToNodesAssignedMap, graph;
 
     parametersSetup(selectedAlg, nThreads, menuMode, selectedGraph, finalPath, argc, argv, algorithms, graphPaths, basePath);
 
-    graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap);
+    graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap, nodesDegree);
 
     do {
 
@@ -131,7 +131,7 @@ int main(int argc, char ** argv) {
             }
 
             case 7: {
-                vector<int> colorsLDF = ldfParallelAssignment(graph, colors, &maxColUsed, nThreads);
+                vector<int> colorsLDF = ldfParallelAssignment(graph, colors, nodesDegree, &maxColUsed, nThreads);
 
                 //some output just to be sure the application ran properly
                 cout << "number of nodes: " << graph.size() << endl;

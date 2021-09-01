@@ -18,12 +18,8 @@
 
 using namespace std;
 
-vector<int> ldfParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed, int nThreads);
+vector<int> ldfParallelAssignment(map<int, list<int>>& graph, vector<int> colors, map<int, int> nodesDegree, int* maxColUsed, int nThreads);
 
-map<int, int> assignDegree(map<int, list<int>> &map, int threads);
-
-void findDegreeThread(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, int threadId, int maxThreads, int stepSize, int size);
-
-void ldfVertexColouring(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int>& colors, int startOffset, int stepSize, int* maxColUsed, int* coloredNodes);
+void ldfVertexColouring(map<int, list<int>>& graph, map<int, int>& nodesDegree, vector<int>& colors, int startOffset, int stepSize, int* maxColUsed, int* coloredNodes);
 
 #endif //REPO_ALGORITHMLDF_H

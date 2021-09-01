@@ -6,16 +6,14 @@ mutex ldfmutex;
 condition_variable cvLDFColor;
 int semLDFColor;
 
-vector<int> ldfParallelAssignment(map<int, list<int>>& graph, vector<int> colors, int* maxColUsed, int nThreads) {
-    chrono::time_point<chrono::system_clock> mappingStart = chrono::system_clock::now();
+vector<int> ldfParallelAssignment(map<int, list<int>>& graph, vector<int> colors, map<int, int> nodesDegree, int* maxColUsed, int nThreads) {
+
     int maxThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
     cout << "Max threads supported: " << maxThreads << endl;
     semLDFColor = maxThreads;
 
-    map<int, int> nodesDegree = assignDegree(graph, maxThreads);
 
-    chrono::time_point<chrono::system_clock> mappingEnd = chrono::system_clock::now();
-    cout << "Time taken to assign degree map: " << chrono::duration_cast<chrono::milliseconds>(mappingEnd - mappingStart).count() << " milliseconds" << endl;
+
 
     vector<thread> workers;
     int coloredNodes = 0;
@@ -36,7 +34,7 @@ vector<int> ldfParallelAssignment(map<int, list<int>>& graph, vector<int> colors
 }
 
 
-void ldfVertexColouring(map<int, list<int>>& graph, map<int, int>& graphNumberMap, vector<int>& colors, int startOffset, int stepSize, int* maxColUsed, int* coloredNodes) {
+void ldfVertexColouring(map<int, list<int>>& graph, map<int, int>& nodesDegree, vector<int>& colors, int startOffset, int stepSize, int* maxColUsed, int* coloredNodes) {
 
     int numThreads = stepSize;
 
@@ -57,11 +55,11 @@ void ldfVertexColouring(map<int, list<int>>& graph, map<int, int>& graphNumberMa
 
                 for (auto const& neighbour : iter->second) {
                     if (colors[neighbour] == -1) {
-                        if (graphNumberMap[iter->first] < graphNumberMap[neighbour]) {
+                        if (nodesDegree[iter->first] < nodesDegree[neighbour]) {
                             maxNode = false;
                             break;
                         }
-                        else if (graphNumberMap[iter->first] == graphNumberMap[neighbour]) {
+                        else if (nodesDegree[iter->first] == nodesDegree[neighbour]) {
                             if (iter->first < neighbour) {
                                 maxNode = false;
                                 break;
@@ -119,35 +117,3 @@ void ldfVertexColouring(map<int, list<int>>& graph, map<int, int>& graphNumberMa
 }
 
 
-bool cmp(pair<int, int>& a,
-         pair<int, int>& b)
-{
-    return a.second < b.second;
-}
-
-map<int, int> assignDegree(map<int, list<int>>& graph, int maxThreads) {
-    map<int, int> nodesDegree = {};
-
-    vector<thread> workers;
-
-    for (int i = 0; i < maxThreads; i++) {
-        int size = graph.size();
-        int stepSize = size/maxThreads;
-        workers.emplace_back([&graph, &nodesDegree, i, maxThreads, stepSize, size] {findDegreeThread(graph, nodesDegree, i, maxThreads, stepSize, size); });
-    }
-
-    //Wait for all threads to finish
-    for (auto& worker : workers) {
-        worker.join();
-    }
-    //sort(nodesDegree.begin(), nodesDegree.end(), cmp);
-    return nodesDegree;
-}
-
-void findDegreeThread(map<int, list<int>>& graph, map<int, int>& nodesDegree, int threadId, int maxThreads, int stepSize, int size) {
-    int lastIndx = threadId == maxThreads-1 ? size : threadId * stepSize + stepSize ;
-    for(int i = threadId * stepSize; i < lastIndx; i++){
-        nodesDegree[i] = graph[i].size();
-    }
-    return;
-}

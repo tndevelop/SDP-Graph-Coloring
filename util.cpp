@@ -14,7 +14,7 @@ vector<int> initializeLabels( int size) {
     return labels;
 }
 
-map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap){
+map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap, map<int, int> &nodesDegree){
 
     chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
     cout << "Initializing reading process" << endl;
@@ -59,46 +59,24 @@ map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<in
             //insert linked nodes into graph
             graph[nodeNumber].insert(graph[nodeNumber].end(), linkedNodes.begin(), linkedNodes.end());
 
-            /* //previous vertion, slower. Substitution made on 29/08 at 14:19
-            if (graph.count(nodeNumber)) {
-                //key already exists
-                tmp = graph[nodeNumber];
-                tmp.insert(tmp.end(), linkedNodes.begin(), linkedNodes.end());
-                graph[nodeNumber] = tmp;
-            }else{
-                graph[nodeNumber] = linkedNodes;
-            }*/
-
             //link back all the linked nodes to the current node
             for( auto & node : linkedNodes){
                 graph[node].insert(graph[node].begin(), nodeNumber);
-
-                /* //previous vertion, slower. Substitution made on 29/08 at 14:19
-                if (graph.count(node)) {
-                    //key already exists
-                    tmp = graph[node];
-
-                    tmp.insert(tmp.begin(), nodeNumber);
-                    graph[node] = tmp;
-                }else{
-                    tmp={};
-                    tmp.insert(tmp.begin(), nodeNumber);
-                    graph[node] = tmp;
-                }*/
-
             }
         }
         myfile.close();
     }else cout << "Unable to open file";
 
     graphNumberMap = {};
-
+    nodesDegree = {};
 
     for (auto const& node : graph) {
         int randNumber=rand()%(graph.size()*2);
         graphNumberMap[node.first] = randNumber;
         randToNodesAssignedMap[randNumber].insert(randToNodesAssignedMap[randNumber].begin(), node.first);
     }
+
+    nodesDegree = assignDegree(graph, thread::hardware_concurrency());
 
     chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
     cout << "Time taken by Read: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
@@ -146,13 +124,40 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
         if(!(alg == 0 || alg == 1 || alg == 3)) {
             cout << endl << "Select number of threads:" << endl;
             cin >> nThreads;
-            nThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
         }
+        nThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
         cout << "Running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
     }else{
         alg = atoi(argv[2]);
     }
     return true;
 
+}
+
+
+map<int, int> assignDegree(map<int, list<int>>& graph, int maxThreads) {
+    map<int, int> nodesDegree = {};
+
+    vector<thread> workers;
+
+    for (int i = 0; i < maxThreads; i++) {
+        int size = graph.size();
+        int stepSize = size/maxThreads;
+        workers.emplace_back([&graph, &nodesDegree, i, maxThreads, stepSize, size] {findDegreeThread(graph, nodesDegree, i, maxThreads, stepSize, size); });
+    }
+
+    //Wait for all threads to finish
+    for (auto& worker : workers) {
+        worker.join();
+    }
+    return nodesDegree;
+}
+
+void findDegreeThread(map<int, list<int>>& graph, map<int, int>& nodesDegree, int threadId, int maxThreads, int stepSize, int size) {
+    int lastIndx = threadId == maxThreads-1 ? size : threadId * stepSize + stepSize ;
+    for(int i = threadId * stepSize; i < lastIndx; i++){
+        nodesDegree[i] = graph[i].size();
+    }
+    return;
 }
 
