@@ -3,6 +3,9 @@
 #include "algorithmGreedy.h"
 #include "algorithmJP.h"
 #include "algorithmSDL.h"
+#include "algorithmLDF.h"
+#include "windows.h"
+#include "psapi.h"
 
 #include <iostream>
 #include <string>
@@ -32,7 +35,7 @@ using namespace std;
 int main(int argc, char ** argv) {
     int alg, nThreads = -1, maxColUsed = -1;
     string selectedAlg, selectedGraph, finalPath, basePath = "./graphs/benchmark/";
-    vector<string> algorithms  = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel"};
+    vector<string> algorithms  = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel", "LDF parallel"};
     vector<string> graphPaths = {/*0)*/"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/,
             /*3)*/"small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
             // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
@@ -41,18 +44,19 @@ int main(int argc, char ** argv) {
 
     bool menuMode = false;
     vector<int> colors;
-    map<int, int> graphNumberMap;
+    map<int, int> graphNumberMap, nodesDegree;
     map<int, list<int>> randToNodesAssignedMap, graph;
 
     parametersSetup(selectedAlg, nThreads, menuMode, selectedGraph, finalPath, argc, argv, algorithms, graphPaths, basePath);
 
-    graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap);
+    graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap, nodesDegree);
 
     do {
 
         if(!prerunSetup(colors, alg, menuMode, algorithms, nThreads, selectedGraph, argc, argv, graph))
             break;
 
+        PROCESS_MEMORY_COUNTERS memCount;
         chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
         cout<<"Starting now"<<endl;
 
@@ -129,6 +133,16 @@ int main(int argc, char ** argv) {
                 break;
             }
 
+            case 7: {
+                vector<int> colorsLDF = ldfParallelAssignment(graph, colors, nodesDegree, &maxColUsed, nThreads);
+
+                //some output just to be sure the application ran properly
+                cout << "number of nodes: " << graph.size() << endl;
+                cout << "number of LDF colors: " << maxColUsed + 1 << endl;
+                cout << "for instance color " << colorsLDF[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
+                break;
+            }
+
             default:{
                 cout << "Selected non-existing algorithm";
                 break;
@@ -138,6 +152,11 @@ int main(int argc, char ** argv) {
         chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
         cout << "Time taken: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
         cout << endl;
+        if (!menuMode) {
+            GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&memCount, sizeof(memCount));
+            cout << "Peak memory used: " << (double) memCount.PeakWorkingSetSize / 1024 / 1024 << " MB" << endl;
+        }
+        
     }while(menuMode == true);
 
     return 0;

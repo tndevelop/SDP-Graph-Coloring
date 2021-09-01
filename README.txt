@@ -6,7 +6,7 @@
 
 To compile the project on a Linux operative system execute this command from a terminal at the project directory: 
 
-1) g++ -std=c++11 -g -pthread main.cpp util.cpp graphColoringAlgorithms.cpp algorithmMIS.cpp algorithmGreedy.cpp
+1) g++ -std=c++11 -g -pthread main.cpp util.cpp algorithmMIS.cpp algorithmGreedy.cpp algorithmJP.cpp algorithmSDL.cpp 
 
 This should produce an a.out file.
 

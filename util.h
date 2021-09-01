@@ -18,7 +18,7 @@
 
 using namespace std;
 
-map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap);
+map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap, map<int, int> &nodesDegree);
 
 vector<int> initializeLabels(int size);
 
@@ -26,5 +26,10 @@ void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string 
 
 bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> algorithms, int nThreads, string selectedGraph, int argc,
                  char **argv, map<int, list<int>> graph);
+
+map<int, int> assignDegree(map<int, list<int>> &map, int threads);
+
+void findDegreeThread(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, int threadId, int maxThreads, int stepSize, int size);
+
 
 #endif //REPO_UTIL_H
