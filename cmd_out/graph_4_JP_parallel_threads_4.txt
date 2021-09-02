@@ -1,0 +1,5 @@
+
+-------------------------------------------------------------------------
+running JP parallel algorithm on graph small_sparse_real/human_dag_uniq.gra
+
+Initializing reading process

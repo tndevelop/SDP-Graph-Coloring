@@ -18,7 +18,6 @@ vector<int> jonesPlassmannSequentialAssignment(map<int, list<int>>& graph, map<i
     int coloredNodes = 0;
 
     while (coloredNodes < colors.size()) {
-
         for (auto const& node : graph) {
             if (colors[node.first] == -1) {
 
@@ -100,7 +99,6 @@ void jpVertexColouring(map<int, list<int>>& graph, map<int, int>& graphNumberMap
     int numThreads = stepSize; 
 
     while (*coloredNodes < colors.size()) {
-
         // Step through the nodes with the step size of number of threads
         map<int, list<int>>::iterator iter = graph.begin();
         advance(iter, startOffset);

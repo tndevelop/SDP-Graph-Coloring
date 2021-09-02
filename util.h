@@ -20,6 +20,8 @@ using namespace std;
 
 map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap, map<int, int> &nodesDegree);
 
+map<int, list<int>> readGraph2(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap, map<int, int> &nodesDegree);
+
 vector<int> initializeLabels(int size);
 
 void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string &selectedGraph, string &finalPath, int argc, char ** argv, vector<string> algorithms, vector<string> graphPaths, string basePath);

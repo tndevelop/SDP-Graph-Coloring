@@ -1,0 +1,16 @@
+
+-------------------------------------------------------------------------
+running greedy algorithm on graph rgg/rgg_n_2_15_s0.graph
+
+Initializing reading process
+line: 10000
+line: 20000
+line: 30000
+Time taken by Read: 7409 milliseconds
+Starting now
+number of nodes: 32769
+number of greedy colors: 13
+for instance color 1 was assigned to node 12
+Time taken: 1583 milliseconds
+
+Peak memory used: 157.797 MB

@@ -39,7 +39,6 @@ void ldfVertexColouring(map<int, list<int>>& graph, map<int, int>& nodesDegree, 
     int numThreads = stepSize;
 
     while (*coloredNodes < colors.size()) {
-
         // Step through the nodes with the step size of number of threads
         map<int, list<int>>::iterator iter = graph.begin();
         advance(iter, startOffset);

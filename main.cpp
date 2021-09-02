@@ -41,7 +41,10 @@ int main(int argc, char ** argv) {
             /*3)*/"small_sparse_real/agrocyc_dag_uniq.gra"/*1MB*/, "small_sparse_real/human_dag_uniq.gra"/*0.5MB*/, "small_dense_real/arXiv_sub_6000-1.gra"/*0.3MB*/, "scaleFree/ba10k5d.gra"/*0.2MB*/,
             // the next files are too large for git, need to import the "large" folder under "benchmark". It is already ignored in the .gitignore file
             /*7)*/"large/uniprotenc_150m.scc.gra"/*2MB*/, "large/citeseer.scc.gra"/*8MB*/, "large/uniprotenc_22m.scc.gra"/*19MB*/, "large/go_uniprot.gra"/*255MB*/,
-            /*11)*/"large/citeseerx.gra" /*176MB*/, "large/cit-Patents.scc.gra" /*162MB*/, "large/uniprotenc_100m.scc.gra" /*232MB*/};
+            /*11)*/"large/citeseerx.gra" /*176MB*/, "large/cit-Patents.scc.gra" /*162MB*/, "large/uniprotenc_100m.scc.gra" /*232MB*/, /*15*/"small_sparse_real/vchocyc_dag_uniq" /*123KB*/,
+
+            /*15*/"rgg/rgg_n_2_15_s0.graph"/*1MB*/, /*16*/"rgg/rgg_n_2_16_s0.graph"/*4MB*/ , /*17*/"rgg/rgg_n_2_17_s0.graph"/*8MB*/ , /*18*/"rgg/rgg_n_2_18_s0.graph"/*19MB*/ , /*19*/"rgg/rgg_n_2_19_s0.graph"/*43MB*/
+    };
 
     //createBatchFile();// uncomment when required to create the batch file
 
@@ -52,6 +55,8 @@ int main(int argc, char ** argv) {
 
     parametersSetup(selectedAlg, nThreads, menuMode, selectedGraph, finalPath, argc, argv, algorithms, graphPaths, basePath);
 
+    finalPath.substr(finalPath.length() -6, finalPath.length()) == ".graph" ?
+    graph = readGraph2(finalPath, graphNumberMap, randToNodesAssignedMap, nodesDegree) :
     graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap, nodesDegree);
 
     do {

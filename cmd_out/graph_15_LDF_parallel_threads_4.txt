@@ -1,0 +1,17 @@
+
+-------------------------------------------------------------------------
+running LDF parallel algorithm on graph rgg/rgg_n_2_15_s0.graph
+
+Initializing reading process
+line: 10000
+line: 20000
+line: 30000
+Time taken by Read: 7859 milliseconds
+Starting now
+Max threads supported: 4
+number of nodes: 32769
+number of LDF colors: 14
+for instance color 6 was assigned to node 13
+Time taken: 13216 milliseconds
+
+Peak memory used: 157.43 MB

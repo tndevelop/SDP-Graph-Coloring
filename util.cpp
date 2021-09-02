@@ -86,6 +86,72 @@ map<int, list<int>> readGraph(string path, map<int, int> &graphNumberMap, map<in
     return graph;
 }
 
+
+map<int, list<int>> readGraph2(string path, map<int, int> &graphNumberMap, map<int, list<int>> & randToNodesAssignedMap, map<int, int> &nodesDegree){
+
+    chrono::time_point<chrono::system_clock> startTime = chrono::system_clock::now();
+    cout << "Initializing reading process" << endl;
+    string line;
+    int nodeNumber=-1;
+    list<int> linkedNodes;
+    list<int> tmp;
+    map<int, list<int>> graph {};
+    int lineCount = 0;
+
+    ifstream myfile (path);
+    if (myfile.is_open())
+    {
+        //get number of nodes, which we actually don't need since we use a map
+        getline (myfile,line);
+        if(line == "graph_for_greach") getline (myfile,line);
+
+        while ( getline (myfile,line) )
+        {
+            lineCount++;
+            if(lineCount % 10000 == 0)
+                cout << "line: " << lineCount << endl;
+            linkedNodes = {};
+            tmp = {};
+            string delimiter = " ";
+            size_t pos = 0;
+            string token;
+            nodeNumber = lineCount;
+            //read all linked nodes
+            while ((pos = line.find(delimiter)) != string::npos) {
+                token = line.substr(0, pos);
+                line.erase(0, pos + delimiter.length());
+                linkedNodes.push_back(stoi(token));
+
+            }
+            linkedNodes.push_back(stoi(line));//get last neighbor
+            //insert linked nodes into graph
+            graph[nodeNumber].insert(graph[nodeNumber].end(), linkedNodes.begin(), linkedNodes.end());
+
+            //link back all the linked nodes to the current node
+            for( auto & node : linkedNodes){
+                graph[node].insert(graph[node].begin(), nodeNumber);
+            }
+        }
+        myfile.close();
+    }else cout << "Unable to open file";
+
+    graphNumberMap = {};
+    nodesDegree = {};
+
+    for (auto const& node : graph) {
+        int randNumber=rand()%(graph.size()*2);
+        graphNumberMap[node.first] = randNumber;
+        randToNodesAssignedMap[randNumber].insert(randToNodesAssignedMap[randNumber].begin(), node.first);
+    }
+
+    nodesDegree = assignDegree(graph, thread::hardware_concurrency());
+
+    chrono::time_point<chrono::system_clock> endTime = chrono::system_clock::now();
+    cout << "Time taken by Read: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
+
+    return graph;
+}
+
 void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string &selectedGraph, string &finalPath, int argc, char ** argv, vector<string> algorithms, vector<string> graphPaths, string basePath) {
     selectedGraph = graphPaths[atoi(argv[1])];
     finalPath = basePath + selectedGraph;
