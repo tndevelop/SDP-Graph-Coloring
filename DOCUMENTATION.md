@@ -4,7 +4,7 @@ Date: 2 September 2021
 
 Authors: 
 Kylie Bedwell s287581,
-Tomasso Natta s282478,
+Tommaso Natta s282478,
 Marco Pappalardo s277867
 
 # Introduction
