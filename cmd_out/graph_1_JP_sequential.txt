@@ -3,11 +3,11 @@
 running JP sequential algorithm on graph manual/v100.gra
 
 Initializing reading process
-Time taken by Read: 37 milliseconds
+Time taken by Read: 61 milliseconds
 Starting now
 number of nodes: 100
 number of JP colors: 78
 for instance color 41 was assigned to node 77
-Time taken: 62 milliseconds
+Time taken: 100 milliseconds
 
-Peak memory used: 8.49219 MB
+Peak memory used: 6.15625 MB

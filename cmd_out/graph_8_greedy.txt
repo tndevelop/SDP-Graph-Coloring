@@ -1,0 +1,19 @@
+
+-------------------------------------------------------------------------
+running greedy algorithm on graph large/citeseer.scc.gra
+
+Initializing reading process
+line: 100000
+line: 200000
+line: 300000
+line: 400000
+line: 500000
+line: 600000
+Time taken by Read: 47577 milliseconds
+Starting now
+number of nodes: 693947
+number of greedy colors: 2
+for instance color 0 was assigned to node 1
+Time taken: 7355 milliseconds
+
+Peak memory used: 751.238 MB

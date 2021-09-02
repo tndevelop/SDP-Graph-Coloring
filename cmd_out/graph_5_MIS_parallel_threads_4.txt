@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running MIS parallel algorithm on graph small_dense_real/arXiv_sub_6000-1.gra
+
+Initializing reading process
+Time taken by Read: 1272 milliseconds
+Starting now
+Max threads supported: 4
+number of nodes: 6000
+number of MIS colors: 105
+for instance color 2 was assigned to node 104
+Time taken: 2476 milliseconds
+
+Peak memory used: 24.4648 MB

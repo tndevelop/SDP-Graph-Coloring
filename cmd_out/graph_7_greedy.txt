@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running greedy algorithm on graph large/uniprotenc_150m.scc.gra
+
+Initializing reading process
+line: 100000
+Time taken by Read: 12042 milliseconds
+Starting now
+number of nodes: 184672
+number of greedy colors: 2
+for instance color 0 was assigned to node 1
+Time taken: 2212 milliseconds
+
+Peak memory used: 155.695 MB

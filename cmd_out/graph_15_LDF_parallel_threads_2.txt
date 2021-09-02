@@ -1,0 +1,8 @@
+
+-------------------------------------------------------------------------
+running LDF parallel algorithm on graph rgg/rgg_n_2_15_s0.graph
+
+Initializing reading process
+line: 10000
+line: 20000
+line: 30000

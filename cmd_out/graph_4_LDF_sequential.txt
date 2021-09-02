@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running LDF parallel algorithm on graph small_sparse_real/human_dag_uniq.gra
+
+Initializing reading process
+Time taken by Read: 2945 milliseconds
+Starting now
+Max threads supported: 1
+number of nodes: 38811
+number of LDF colors: 5
+for instance color 0 was assigned to node 4
+Time taken: 1123 milliseconds
+
+Peak memory used: 60.5156 MB

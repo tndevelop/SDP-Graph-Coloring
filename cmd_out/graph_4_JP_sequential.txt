@@ -1,0 +1,13 @@
+
+-------------------------------------------------------------------------
+running JP sequential algorithm on graph small_sparse_real/human_dag_uniq.gra
+
+Initializing reading process
+Time taken by Read: 2781 milliseconds
+Starting now
+number of nodes: 38811
+number of JP colors: 5
+for instance color 0 was assigned to node 4
+Time taken: 982 milliseconds
+
+Peak memory used: 60.5117 MB

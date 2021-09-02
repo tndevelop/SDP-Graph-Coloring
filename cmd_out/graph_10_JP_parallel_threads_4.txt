@@ -1,0 +1,5 @@
+
+-------------------------------------------------------------------------
+running JP parallel algorithm on graph large/go_uniprot.gra
+
+Initializing reading process

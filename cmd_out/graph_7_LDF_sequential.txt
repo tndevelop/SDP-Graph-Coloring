@@ -1,0 +1,15 @@
+
+-------------------------------------------------------------------------
+running LDF parallel algorithm on graph large/uniprotenc_150m.scc.gra
+
+Initializing reading process
+line: 100000
+Time taken by Read: 11917 milliseconds
+Starting now
+Max threads supported: 1
+number of nodes: 184672
+number of LDF colors: 3
+for instance color 1 was assigned to node 2
+Time taken: 4535 milliseconds
+
+Peak memory used: 154.82 MB

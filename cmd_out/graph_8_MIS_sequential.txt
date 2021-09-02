@@ -1,0 +1,19 @@
+
+-------------------------------------------------------------------------
+running MIS sequential algorithm on graph large/citeseer.scc.gra
+
+Initializing reading process
+line: 100000
+line: 200000
+line: 300000
+line: 400000
+line: 500000
+line: 600000
+Time taken by Read: 45217 milliseconds
+Starting now
+number of nodes: 693947
+number of MIS colors: 3
+for instance color 0 was assigned to node 2
+Time taken: 86824 milliseconds
+
+Peak memory used: 1192.48 MB

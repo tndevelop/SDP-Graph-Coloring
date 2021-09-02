@@ -39,7 +39,12 @@ Initially the algorithms were written together in one .cpp file, with the intent
 
 ## Graph Reading
 
-%TODO - Tommaso
+
+First step before any algorithm execution is to acquire data and to acquire them in the right form. The graph was acquired by a std::map associating in each entry the node number to a std::list of node numbers rapresenting the neighbors of the given node.
+
+The read step is also in charge of computing some of the auxiliary structures that the algorithms will later use, such as maps containing the degree of the node or random numbers associated to each node. 
+
+Since this operation involves potentially many I/O operations, it was not accounted for in the algorithms' time performance, as it would require time lengths greater than algorithm executions' ones by up to one order of magnitude.    
 
 ## Parallelisation
 

@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running LDF parallel algorithm on graph small_dense_real/arXiv_sub_6000-1.gra
+
+Initializing reading process
+Time taken by Read: 1276 milliseconds
+Starting now
+Max threads supported: 1
+number of nodes: 6000
+number of LDF colors: 28
+for instance color 2 was assigned to node 27
+Time taken: 10099 milliseconds
+
+Peak memory used: 23.918 MB
