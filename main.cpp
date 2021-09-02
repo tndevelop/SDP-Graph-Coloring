@@ -4,8 +4,8 @@
 #include "algorithmJP.h"
 #include "algorithmSDL.h"
 #include "algorithmLDF.h"
-#include "windows.h"
-#include "psapi.h"
+//#include "windows.h"
+//#include "psapi.h"
 
 #include <iostream>
 #include <string>
@@ -165,8 +165,8 @@ int main(int argc, char ** argv) {
         cout << "Time taken: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
         cout << endl;
         if (!menuMode) {
-            GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&memCount, sizeof(memCount));
-              cout << "Peak memory used: " << (double) memCount.PeakWorkingSetSize / 1024 / 1024 << " MB" << endl;
+         //   GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&memCount, sizeof(memCount));
+         //     cout << "Peak memory used: " << (double) memCount.PeakWorkingSetSize / 1024 / 1024 << " MB" << endl;
         }
         
     }while(menuMode == true);

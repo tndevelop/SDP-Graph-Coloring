@@ -18,7 +18,7 @@ void assignColoursSDLParallel(map<int, list<int>> &uncoloredNodes, vector<int> &
                               int *maxColUsed);
 vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> map, vector<int> vector, int *maxColUsed,
                                                    ::map<int, list<int>> nodeWeights);
-vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> map, vector<int> vector, int *maxColUsed,
-                                                 ::map<int, list<int>> nodeWeights);
+vector<int> smallestDegreeLastParallelAssignment(map<int, list<int>> graph, vector<int> colors, int *maxColUsed,
+                                                 map<int, list<int>> &nodeWeights);
 
 #endif //REPO_ALGORITHMSDL_H
