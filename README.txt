@@ -3,13 +3,14 @@
 
 ## Compilation
 
+A precompiled version of the program is included in the SDP-Graph-Coloring_Submission root directory called graphColoring.exe. 
 
-To compile the project on a Windows operative system:
+Alternatively, to compile the project on a Windows operative system:
 
-1) Build the project from visual studio
+1) Import then build the project from visual studio 
 
 2) Execute this command from a developer command prompt (visual studio is required) at the project directory:
- cl /EHsc main.cpp util.cpp algorithmMIS.cpp algorithmGreedy.cpp algorithmJP.cpp algorithmSDL.cpp /link /out:graphColoring.exe
+ cl /EHsc main.cpp util.cpp algorithmMIS.cpp algorithmGreedy.cpp algorithmJP.cpp algorithmSDL.cpp algorithmLDF.cpp /link /out:graphColoring.exe
 
 This should produce an graphColoring.exe  file.
 
