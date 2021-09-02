@@ -189,9 +189,12 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
         if(alg >= algorithms.capacity())
             return false;
 
-        if(!(alg == 0 || alg == 1 || alg == 3)) {
+        if(!(alg == 0 || alg == 1 || alg == 3 || alg == 5)) {
             cout << endl << "Select number of threads:" << endl;
             cin >> nThreads;
+        }
+        else {
+            nThreads = 1;
         }
         nThreads = (nThreads <= 0 || nThreads > thread::hardware_concurrency()) ? thread::hardware_concurrency() : nThreads ;
         cout << "Running " << algorithms[alg] << " algorithm on graph " << selectedGraph << " with " << nThreads << " threads" << endl << endl ;
