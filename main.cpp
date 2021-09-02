@@ -34,7 +34,7 @@ using namespace std;
 
 
 int main(int argc, char ** argv) {
-    int alg, nThreads = -1, maxColUsed = -1;
+    int alg, nThreads = -1;
     string selectedAlg, selectedGraph, finalPath, basePath = "./graphs/benchmark/";
     vector<string> algorithms  = {"greedy", "JP sequential", "JP parallel","SDL sequential","SDL parallel", "MIS sequential", "MIS parallel", "LDF parallel"};
     vector<string> graphPaths = {/*0)*/"manual/v10.gra"/*1KB*/, "manual/v100.gra"/*13KB*/, "manual/v1000.gra"/*1.6MB*/,
@@ -55,6 +55,8 @@ int main(int argc, char ** argv) {
     graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap, nodesDegree);
 
     do {
+
+        int maxColUsed = -1;
 
         if(!prerunSetup(colors, alg, menuMode, algorithms, nThreads, selectedGraph, argc, argv, graph))
             break;
