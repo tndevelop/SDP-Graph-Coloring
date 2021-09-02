@@ -56,6 +56,8 @@ Synchronization of the threads was achieved using a combination of mutexes and c
 
 The analysis of the different graph coloring algorithms was conducted using a range of different graphs. The result for the execution time of each algorithm for each graph is shown in Table 1. The parallel algorithms were executed using from 1 to 8 threads for comparison. It can be seen that the greedy algorithm is faster than the parallel algorithms for smaller graphs. This was expected because parallel algorithms require an overhead of code to set up and synchronize the execution of the parallel threads, and the benefits of this overhead are not realised for smaller graphs. For the larger graphs however it can be seen that the parallel algorithms are beneficial to the program execution time. 
 
+Low-density graphs benefit from the use of the parallel algorithms as well. Indeed it can be seen that on sparse graphs such as "human_dag_uniq.gra" and "agrocyc_dag_uniq.gra", even though small, the parallel algorithms perform as good as the greedy one. That means they are fast enough to compensate the overhead due to threads set up an syncronization.   
+
 Table 1: Algorithm execution times. 
 
 [%TODO insert Table]
