@@ -61,6 +61,8 @@ int main(int argc, char ** argv) {
 
     do {
 
+        int maxColUsed = -1;
+
         if(!prerunSetup(colors, alg, menuMode, algorithms, nThreads, selectedGraph, argc, argv, graph))
             break;
 
