@@ -27,13 +27,13 @@ vector<int> initializeLabels(int size);
 void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string &selectedGraph, string &finalPath, int argc, char ** argv, vector<string> algorithms, vector<string> graphPaths, string basePath);
 
 bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> algorithms, int nThreads, string selectedGraph, int argc,
-                 char **argv, map<int, list<int>> graph);
+                 char **argv, map<int, list<int>> graph,map<int, list<int>> &nodeWeight) ;
 
 map<int, int> assignDegree(map<int, list<int>> &map, int threads);
 
 void findDegreeThread(map<int, list<int>>& uncoloredNodes, map<int, int>& graphNumberMap, int threadId, int maxThreads, int stepSize, int size);
 
 void createBatchFile();
-
+map<int,list<int>> assignWeight (map<int,list<int>> graph);
 
 #endif //REPO_UTIL_H

@@ -173,7 +173,7 @@ void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string 
 }
 
 bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> algorithms, int nThreads, string selectedGraph, int argc,
-                 char **argv, map<int, list<int>> graph) {
+                 char **argv, map<int, list<int>> graph, map<int, list<int>> &nodeWeight ) {
     colors = initializeLabels(graph.size());
     int i=0;
     if(menuMode){
@@ -198,6 +198,9 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
     }else{
         alg = atoi(argv[2]);
     }
+    if(alg==3 || alg==4){
+        nodeWeight= assignWeight(graph);
+    }
     return true;
 
 }
@@ -220,6 +223,34 @@ map<int, int> assignDegree(map<int, list<int>>& graph, int maxThreads) {
     }
     return nodesDegree;
 }
+
+map<int,list<int>> assignWeight (map <int,list<int>> graph){
+    int i = 1;
+    int k = 0;
+    map<int, list<int>> unweightedGraph(graph);
+    map<int, list<int>> nodeWeights = {};
+    vector<int> toBeRemoved = {};
+    while (!unweightedGraph.empty()) {
+        for (auto const &node : unweightedGraph) {
+            if (node.second.size() <= k) {
+                nodeWeights[i].emplace_back(node.first);
+                for (const auto neighbour : node.second) {
+                    unweightedGraph[neighbour].remove(node.first);
+                }
+                toBeRemoved.emplace_back(node.first);
+            }
+        }
+        if (toBeRemoved.size() > 0) {
+            i++;
+            for (auto node : toBeRemoved) {
+                unweightedGraph.erase(node);
+            }
+            toBeRemoved.clear();
+        }
+        k++;
+    }
+    return nodeWeights;
+};
 
 void findDegreeThread(map<int, list<int>>& graph, map<int, int>& nodesDegree, int threadId, int maxThreads, int stepSize, int size) {
     int lastIndx = threadId == maxThreads-1 ? size : threadId * stepSize + stepSize ;

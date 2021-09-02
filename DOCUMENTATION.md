@@ -17,8 +17,9 @@ The main goal of this project was to analyze and optimize the performance of eac
 Four graph coloring algorithms were considered during the implementation phase of this project, as described in [1]. 
 1) A sequencial greedy algorithm 
 2) The Jones-Plassman parallel algorithm 
-3) The Smallest-Degree-Last parallel algorithm 
+3) The Smallest-Degree-Last parallel algorithm
 4) The Largest-Degree-First parallel algorithm
+
 
 The aim of this project was to prove that the parallel algorithms can outperform sequential algorithms in terms of the time taken to analyze large graphs. To this end a variety of different of graphs with different sizes have been analysed, along with the effect of differing the number of available threads for the parallel algorithms.
 
@@ -37,6 +38,7 @@ Initially the algorithms were written together in one .cpp file, with the intent
 
 
 ## Graph Reading
+
 
 First step before any algorithm execution is to acquire data and to acquire them in the right form. The graph was acquired by a std::map associating in each entry the node number to a std::list of node numbers rapresenting the neighbors of the given node.
 
