@@ -1,6 +1,6 @@
 
 -------------------------------------------------------------------------
-running JP parallel algorithm on graph large/citeseer.scc.gra
+running MIS parallel algorithm on graph large/citeseer.scc.gra
 
 Initializing reading process
 line: 100000
@@ -9,12 +9,12 @@ line: 300000
 line: 400000
 line: 500000
 line: 600000
-Time taken by Read: 48198 milliseconds
+Time taken by Read: 45249 milliseconds
 Starting now
 Max threads supported: 2
 number of nodes: 693947
-number of JP colors: 5
-for instance color 0 was assigned to node 4
-Time taken: 11190 milliseconds
+number of MIS colors: 10
+for instance color 2 was assigned to node 9
+Time taken: 75380 milliseconds
 
-Peak memory used: 747.211 MB
+Peak memory used: 911.598 MB

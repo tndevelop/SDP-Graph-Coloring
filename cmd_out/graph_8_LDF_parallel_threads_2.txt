@@ -1,6 +1,6 @@
 
 -------------------------------------------------------------------------
-running JP parallel algorithm on graph large/citeseer.scc.gra
+running LDF parallel algorithm on graph large/citeseer.scc.gra
 
 Initializing reading process
 line: 100000
@@ -9,12 +9,12 @@ line: 300000
 line: 400000
 line: 500000
 line: 600000
-Time taken by Read: 48198 milliseconds
+Time taken by Read: 44950 milliseconds
 Starting now
 Max threads supported: 2
 number of nodes: 693947
-number of JP colors: 5
-for instance color 0 was assigned to node 4
-Time taken: 11190 milliseconds
+number of LDF colors: 4
+for instance color 0 was assigned to node 3
+Time taken: 9024 milliseconds
 
-Peak memory used: 747.211 MB
+Peak memory used: 747.406 MB

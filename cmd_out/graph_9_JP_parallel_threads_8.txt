@@ -1,0 +1,29 @@
+
+-------------------------------------------------------------------------
+running JP parallel algorithm on graph large/uniprotenc_22m.scc.gra
+
+Initializing reading process
+line: 100000
+line: 200000
+line: 300000
+line: 400000
+line: 500000
+line: 600000
+line: 700000
+line: 800000
+line: 900000
+line: 1000000
+line: 1100000
+line: 1200000
+line: 1300000
+line: 1400000
+line: 1500000
+Time taken by Read: 117058 milliseconds
+Starting now
+Max threads supported: 8
+number of nodes: 1595444
+number of JP colors: 4
+for instance color 0 was assigned to node 3
+Time taken: 33644 milliseconds
+
+Peak memory used: 2022.82 MB
