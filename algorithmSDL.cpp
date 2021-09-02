@@ -7,7 +7,7 @@
 #include <vector>
 
 using namespace std;
-
+mutex sdlmutex;
 
 vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int *maxColUsed,
                                                    map<int, list<int>> nodeWeights) {
@@ -67,6 +67,7 @@ void assignColoursSDLParallel(map<int, list<int>> &uncoloredNodes, vector<int> &
     map<int, list<int>> neighborColors = {};
     for (int i = nodeWeights.size() - threadN; i > threadN; i -= maxThread) {
         for (const auto node: nodeWeights[i]) {
+            sdlmutex.lock();
             neighborColors[node].sort();
             int selectedCol = 0;
             int previous = 0;
@@ -79,13 +80,17 @@ void assignColoursSDLParallel(map<int, list<int>> &uncoloredNodes, vector<int> &
                 }
                 previous = neighborCol;
             }
+            sdlmutex.unlock();
+
             colors[node] = selectedCol;
             if (selectedCol > *maxColUsed)
                 *maxColUsed = selectedCol;
+            sdlmutex.lock();
 
             for (auto &neighbor : uncoloredNodes[node]) {
                 neighborColors[neighbor].emplace_back(selectedCol);
             }
+            sdlmutex.unlock();
 
         }
     }
