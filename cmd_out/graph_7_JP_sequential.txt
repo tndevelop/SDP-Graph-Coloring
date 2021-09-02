@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running JP sequential algorithm on graph large/uniprotenc_150m.scc.gra
+
+Initializing reading process
+line: 100000
+Time taken by Read: 11879 milliseconds
+Starting now
+number of nodes: 184672
+number of JP colors: 4
+for instance color 0 was assigned to node 3
+Time taken: 5336 milliseconds
+
+Peak memory used: 154.867 MB

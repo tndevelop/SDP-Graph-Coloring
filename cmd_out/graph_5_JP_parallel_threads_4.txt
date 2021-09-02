@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running JP parallel algorithm on graph small_dense_real/arXiv_sub_6000-1.gra
+
+Initializing reading process
+Time taken by Read: 1256 milliseconds
+Starting now
+Max threads supported: 4
+number of nodes: 6000
+number of JP colors: 29
+for instance color 1 was assigned to node 28
+Time taken: 1320 milliseconds
+
+Peak memory used: 23.9414 MB

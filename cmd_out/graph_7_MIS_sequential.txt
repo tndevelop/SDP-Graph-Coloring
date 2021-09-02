@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running MIS sequential algorithm on graph large/uniprotenc_150m.scc.gra
+
+Initializing reading process
+line: 100000
+Time taken by Read: 11917 milliseconds
+Starting now
+number of nodes: 184672
+number of MIS colors: 3
+for instance color 1 was assigned to node 2
+Time taken: 7003 milliseconds
+
+Peak memory used: 222.672 MB

@@ -1,0 +1,6 @@
+
+-------------------------------------------------------------------------
+running JP sequential algorithm on graph large/citeseer.scc.gra
+
+Initializing reading process
+line: 100000

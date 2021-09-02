@@ -3,12 +3,12 @@
 running JP parallel algorithm on graph manual/v100.gra
 
 Initializing reading process
-Time taken by Read: 37 milliseconds
+Time taken by Read: 64 milliseconds
 Starting now
 Max threads supported: 2
 number of nodes: 100
 number of JP colors: 78
 for instance color 41 was assigned to node 77
-Time taken: 43 milliseconds
+Time taken: 89 milliseconds
 
-Peak memory used: 8.53906 MB
+Peak memory used: 6.15234 MB

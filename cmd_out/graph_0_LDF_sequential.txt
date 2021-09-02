@@ -3,12 +3,12 @@
 running LDF parallel algorithm on graph manual/v10.gra
 
 Initializing reading process
-Time taken by Read: 2 milliseconds
+Time taken by Read: 3 milliseconds
 Starting now
 Max threads supported: 1
 number of nodes: 10
 number of LDF colors: 6
-for instance color 1 was assigned to node 5
-Time taken: 0 milliseconds
+for instance color 5 was assigned to node 5
+Time taken: 1 milliseconds
 
-Peak memory used: 7.55859 MB
+Peak memory used: 5.35547 MB

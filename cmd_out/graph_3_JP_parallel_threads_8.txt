@@ -3,12 +3,12 @@
 running JP parallel algorithm on graph small_sparse_real/agrocyc_dag_uniq.gra
 
 Initializing reading process
-Time taken by Read: 523 milliseconds
+Time taken by Read: 1032 milliseconds
 Starting now
-Max threads supported: 4
+Max threads supported: 8
 number of nodes: 12684
 number of JP colors: 5
 for instance color 0 was assigned to node 4
-Time taken: 94 milliseconds
+Time taken: 142 milliseconds
 
-Peak memory used: 19.6211 MB
+Peak memory used: 17.1797 MB

@@ -1,0 +1,15 @@
+
+-------------------------------------------------------------------------
+running MIS parallel algorithm on graph large/uniprotenc_150m.scc.gra
+
+Initializing reading process
+line: 100000
+Time taken by Read: 11926 milliseconds
+Starting now
+Max threads supported: 2
+number of nodes: 184672
+number of MIS colors: 9
+for instance color 0 was assigned to node 8
+Time taken: 448874 milliseconds
+
+Peak memory used: 175.277 MB

@@ -1,0 +1,5 @@
+
+-------------------------------------------------------------------------
+running JP parallel algorithm on graph large/citeseer.scc.gra
+
+Initializing reading process

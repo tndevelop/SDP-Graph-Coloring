@@ -3,11 +3,11 @@
 running JP sequential algorithm on graph small_sparse_real/agrocyc_dag_uniq.gra
 
 Initializing reading process
-Time taken by Read: 493 milliseconds
+Time taken by Read: 794 milliseconds
 Starting now
 number of nodes: 12684
 number of JP colors: 5
 for instance color 0 was assigned to node 4
-Time taken: 166 milliseconds
+Time taken: 257 milliseconds
 
-Peak memory used: 19.6484 MB
+Peak memory used: 17.1719 MB

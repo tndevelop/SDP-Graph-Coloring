@@ -1,0 +1,8 @@
+
+-------------------------------------------------------------------------
+running LDF parallel algorithm on graph small_sparse_real/agrocyc_dag_uniq.gra
+
+Initializing reading process
+Time taken by Read: 1061 milliseconds
+Starting now
+Max threads supported: 8
