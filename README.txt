@@ -7,12 +7,14 @@ A precompiled version of the program is included in the SDP-Graph-Coloring_Submi
 
 Alternatively, to compile the project on a Windows operative system:
 
-1) Import the files then build the project from visual studio 
+1) Import the files into a visual studio project
 
-2) Execute this command from a developer command prompt (visual studio is required) at the project directory:
- cl /EHsc main.cpp util.cpp algorithmMIS.cpp algorithmGreedy.cpp algorithmJP.cpp algorithmSDL.cpp algorithmLDF.cpp /link /out:graphColoring.exe
+2) To enable the execution of the program on large graphs go to Build -> Configuration Manager and set the project Platform to be x64 (if available)
 
-This should produce an graphColoring.exe  file.
+3) Go to Debug -> <Project> Debug Properties, then to Linker -> System and set Enable Large Addresses to YES (/LARGEADDRESSAWARE)
+
+4) Build the solution (Ctrl + Shift + B)
+
 
 ## Execution
 
