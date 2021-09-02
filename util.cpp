@@ -1,5 +1,7 @@
 #include "util.h"
 #include <list>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -105,7 +107,7 @@ void parametersSetup(string &selectedAlg, int &nThreads, bool &menuMode, string 
 }
 
 bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> algorithms, int nThreads, string selectedGraph, int argc,
-                 char **argv, map<int, list<int>> graph) {
+                 char **argv, map<int, list<int>> graph, map<int, list<int>> &nodeWeight ) {
     colors = initializeLabels(graph.size());
     int i=0;
     if(menuMode){
@@ -130,6 +132,9 @@ bool prerunSetup(vector<int> &colors, int &alg, bool menuMode, vector<string> al
     }else{
         alg = atoi(argv[2]);
     }
+    if(alg==3 || alg==4){
+        nodeWeight= assignWeight(graph);
+    }
     return true;
 
 }
@@ -153,6 +158,34 @@ map<int, int> assignDegree(map<int, list<int>>& graph, int maxThreads) {
     return nodesDegree;
 }
 
+map<int,list<int>> assignWeight (map <int,list<int>> graph){
+    int i = 1;
+    int k = 0;
+    map<int, list<int>> unweightedGraph(graph);
+    map<int, list<int>> nodeWeights = {};
+    vector<int> toBeRemoved = {};
+    while (!unweightedGraph.empty()) {
+        for (auto const &node : unweightedGraph) {
+            if (node.second.size() <= k) {
+                nodeWeights[i].emplace_back(node.first);
+                for (const auto neighbour : node.second) {
+                    unweightedGraph[neighbour].remove(node.first);
+                }
+                toBeRemoved.emplace_back(node.first);
+            }
+        }
+        if (toBeRemoved.size() > 0) {
+            i++;
+            for (auto node : toBeRemoved) {
+                unweightedGraph.erase(node);
+            }
+            toBeRemoved.clear();
+        }
+        k++;
+    }
+    return nodeWeights;
+};
+
 void findDegreeThread(map<int, list<int>>& graph, map<int, int>& nodesDegree, int threadId, int maxThreads, int stepSize, int size) {
     int lastIndx = threadId == maxThreads-1 ? size : threadId * stepSize + stepSize ;
     for(int i = threadId * stepSize; i < lastIndx; i++){
@@ -161,3 +194,44 @@ void findDegreeThread(map<int, list<int>>& graph, map<int, int>& nodesDegree, in
     return;
 }
 
+// Function to create a script file for running multiple graph/algorithm combinations
+void createBatchFile() {
+
+    vector<int> graphs = { 0, 1, 3, 5, 7, 8, 9, 10, 13};
+    vector<int> threads = { 2, 4, 8 };
+
+    ofstream file;
+    file.open("runScript.cmd");
+
+    for (int i = 0; i < graphs.size(); i++) {
+        // Greedy
+        file << "GraphColouring.exe " << graphs[i] << " " << 0 << " > cmd_out/graph_" << graphs[i] << "_greedy.txt" << endl;
+
+        //JP
+        file << "GraphColouring.exe " << graphs[i] << " " << 1 << " > cmd_out/graph_" << graphs[i] << "_JP_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 2 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_JP_parallel_threads_" << threads[k] << ".txt" << endl;
+        }
+
+        /*//SDL
+        file << "GraphColouring.exe " << graphs[i] << " " << 3 << " > cmd_out/graph_" << graphs[i] << "_SDL_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 4 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_SDL_parallel_threads_" << threads[k] << ".txt" << endl;
+        }*/
+
+        //MIS
+        file << "GraphColouring.exe " << graphs[i] << " " << 5 << " > cmd_out/graph_" << graphs[i] << "_MIS_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 6 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_MIS_parallel_threads_" << threads[k] << ".txt" << endl;
+        }
+
+        //LDF
+        file << "GraphColouring.exe " << graphs[i] << " " << "7 1" << " > cmd_out/graph_" << graphs[i] << "_LDF_sequential.txt" << endl;
+        for (int k = 0; k < threads.size(); k++) {
+            file << "GraphColouring.exe " << graphs[i] << " " << 7 << " " << threads[k] << " > cmd_out/graph_" << graphs[i] << "_LDF_parallel_threads_" << threads[k] << ".txt" << endl;
+        }
+        
+    }
+
+    file.close();
+}

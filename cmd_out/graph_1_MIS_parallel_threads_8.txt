@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running MIS parallel algorithm on graph manual/v100.gra
+
+Initializing reading process
+Time taken by Read: 39 milliseconds
+Starting now
+Max threads supported: 4
+number of nodes: 100
+number of MIS colors: 91
+for instance color 19 was assigned to node 90
+Time taken: 54 milliseconds
+
+Peak memory used: 8.59375 MB

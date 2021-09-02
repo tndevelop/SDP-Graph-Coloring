@@ -1,0 +1,14 @@
+
+-------------------------------------------------------------------------
+running SDL sequential algorithm on graph manual/v10.gra
+
+Initializing reading process
+Time taken by Read: 2 milliseconds
+Starting now
+Time taken for weighting: 0 milliseconds
+number of nodes: 10
+number of SDLS colors: 6
+for instance color 1 was assigned to node 5
+Time taken: 0 milliseconds
+
+Peak memory used: 7.53906 MB

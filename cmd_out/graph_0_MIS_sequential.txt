@@ -1,0 +1,13 @@
+
+-------------------------------------------------------------------------
+running MIS sequential algorithm on graph manual/v10.gra
+
+Initializing reading process
+Time taken by Read: 2 milliseconds
+Starting now
+number of nodes: 10
+number of MIS colors: 7
+for instance color 0 was assigned to node 6
+Time taken: 0 milliseconds
+
+Peak memory used: 7.53125 MB

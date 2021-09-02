@@ -17,8 +17,9 @@ The main goal of this project was to analyze and optimize the performance of eac
 Four graph coloring algorithms were considered during the implementation phase of this project, as described in [1]. 
 1) A sequencial greedy algorithm 
 2) The Jones-Plassman parallel algorithm 
-3) The Smallest-Degree-Last parallel algorithm 
-4) The Largest-degree-first parallel algorithm
+3) The Smallest-Degree-Last parallel algorithm
+4) The Largest-Degree-First parallel algorithm
+
 
 The aim of this project was to prove that the parallel algorithms can outperform sequential algorithms in terms of the time taken to analyze large graphs. To this end a variety of different of graphs with different sizes have been analysed, along with the effect of differing the number of available threads for the parallel algorithms.
 
@@ -48,7 +49,24 @@ Synchronization of the threads was achieved using a combination of mutexes and c
 
 # Experimental Evaluation
 
-- include memory and elapsed time for each algorithm for different sized graphs and number of threads
+The analysis of the different graph coloring algorithms was conducted using a range of different graphs. The result for the execution time of each algorithm for each graph is shown in Table 1. The parallel algorithms were executed using from 1 to 8 threads for comparison. It can be seen that the greedy algorithm is faster than the parallel algorithms for smaller graphs. This was expected because parallel algorithms require an overhead of code to set up and synchronize the execution of the parallel threads, and the benefits of this overhead are not realised for smaller graphs. For the larger graphs however it can be seen that the parallel algorithms are beneficial to the program execution time. 
+
+Table 1: Algorithm execution times. 
+
+[%TODO insert Table]
+
+The memory usage of the different algorithms was also analysed and is shown in Table 2. 
+
+Table 2: Memory usage.
+
+[%TODO insert Table]
+
+Finally the number of colors assigned to the graph by each algorithm was also assessed and is shown in Table 3. For some graphs, such as the citeseer.scc.gra graph, the greedy algorithm assigned the least amount of colors. However for other graphs, such as the arXiv_sub_6000-1.gra graph, the least colors was achieved by the Largest-Degree-First algorithm. 
+
+Table 3: Number of colors used.
+
+[%TODO insert Table]
+
 
 # Summary
 

@@ -4,8 +4,8 @@
 #include "algorithmJP.h"
 #include "algorithmSDL.h"
 #include "algorithmLDF.h"
-//#include "windows.h"
-//#include "psapi.h"
+#include "windows.h"
+#include "psapi.h"
 
 #include <iostream>
 #include <string>
@@ -28,6 +28,7 @@ using namespace std;
  *          4 = SDL parallel
  *          5 = MIS sequential
  *          6 = MIS parallel
+ *          7 = LDF parallel
  * )
  */
 
@@ -42,18 +43,20 @@ int main(int argc, char ** argv) {
             /*7)*/"large/uniprotenc_150m.scc.gra"/*2MB*/, "large/citeseer.scc.gra"/*8MB*/, "large/uniprotenc_22m.scc.gra"/*19MB*/, "large/go_uniprot.gra"/*255MB*/,
             /*11)*/"large/citeseerx.gra" /*176MB*/, "large/cit-Patents.scc.gra" /*162MB*/, "large/uniprotenc_100m.scc.gra" /*232MB*/};
 
+    //createBatchFile();// uncomment when required to create the batch file
+
     bool menuMode = false;
     vector<int> colors;
     map<int, int> graphNumberMap, nodesDegree;
     map<int, list<int>> randToNodesAssignedMap, graph;
-
+    map <int,list<int>> nodeWeight;
     parametersSetup(selectedAlg, nThreads, menuMode, selectedGraph, finalPath, argc, argv, algorithms, graphPaths, basePath);
 
     graph = readGraph(finalPath, graphNumberMap, randToNodesAssignedMap, nodesDegree);
 
     do {
 
-        if(!prerunSetup(colors, alg, menuMode, algorithms, nThreads, selectedGraph, argc, argv, graph))
+        if(!prerunSetup(colors, alg, menuMode, algorithms, nThreads, selectedGraph, argc, argv, graph, nodeWeight))
             break;
 
     //    PROCESS_MEMORY_COUNTERS memCount;
@@ -75,7 +78,7 @@ int main(int argc, char ** argv) {
             case 1:{
                 vector<int> colorsJPS = jonesPlassmannSequentialAssignment(graph, graphNumberMap, colors, &maxColUsed);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of JP colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsJPS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -85,7 +88,7 @@ int main(int argc, char ** argv) {
             case 2:{
                 vector<int> colorsJP = jonesPlassmannParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of JP colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsJP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -93,10 +96,9 @@ int main(int argc, char ** argv) {
                 break;
             }
             case 3:{
-                vector<int> colorsSDLS = smallestDegreeLastSequentialAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsSDLS = smallestDegreeLastSequentialAssignment(graph, colors, &maxColUsed, nodeWeight);
 
-
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of SDLS colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsSDLS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -104,9 +106,9 @@ int main(int argc, char ** argv) {
 
             }
             case 4:{
-                vector<int> colorsSDLP = smallestDegreeLastParallelAssignment(graph, colors, &maxColUsed);
+                vector<int> colorsSDLP = smallestDegreeLastParallelAssignment( graph,  colors,  &maxColUsed, nodeWeight);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of SDLP colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsSDLP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -116,7 +118,7 @@ int main(int argc, char ** argv) {
             case 5: {
                 vector<int> colorsMIS = misSequentialAssignment(graph, colors, &maxColUsed);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of MIS colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsMIS[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -124,9 +126,9 @@ int main(int argc, char ** argv) {
             }
 
             case 6: {
-                vector<int> colorsMISP = misParallelAssignment(graph, colors, &maxColUsed, nThreads);
+                vector<int> colorsMISP = misParallelAssignment(graph, graphNumberMap, colors, &maxColUsed, nThreads);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of MIS colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsMISP[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -136,7 +138,7 @@ int main(int argc, char ** argv) {
             case 7: {
                 vector<int> colorsLDF = ldfParallelAssignment(graph, colors, nodesDegree, &maxColUsed, nThreads);
 
-                //some output just to be sure the application ran properly
+                //some output statistics
                 cout << "number of nodes: " << graph.size() << endl;
                 cout << "number of LDF colors: " << maxColUsed + 1 << endl;
                 cout << "for instance color " << colorsLDF[maxColUsed] << " was assigned to node " << maxColUsed << endl; //should never be -1
@@ -153,8 +155,8 @@ int main(int argc, char ** argv) {
         cout << "Time taken: " << chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count() << " milliseconds" << endl;
         cout << endl;
         if (!menuMode) {
-       //     GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&memCount, sizeof(memCount));
-       //     cout << "Peak memory used: " << (double) memCount.PeakWorkingSetSize / 1024 / 1024 << " MB" << endl;
+            GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&memCount, sizeof(memCount));
+              cout << "Peak memory used: " << (double) memCount.PeakWorkingSetSize / 1024 / 1024 << " MB" << endl;
         }
         
     }while(menuMode == true);
