@@ -10,7 +10,7 @@ using namespace std;
 mutex sdlmutex;
 
 vector<int> smallestDegreeLastSequentialAssignment(map<int, list<int>> graph, vector<int> colors, int *maxColUsed,
-                                                   map<int, list<int>> nodeWeights) {
+                                                   map<int, list<int>> &nodeWeights) {
 
     map<int, list<int>> uncoloredNodes = graph;
 
